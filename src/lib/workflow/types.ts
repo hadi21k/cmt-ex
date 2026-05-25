@@ -95,3 +95,32 @@ export interface ProcessResult {
   reviewItem: ReviewQueueItem | null;
   auditLogs: AuditLog[];
 }
+
+/** A pending action emitted by an adapter, before persistence + execution. */
+export interface ActionSpec {
+  type: string;
+  payload: Record<string, unknown>;
+}
+
+/** Result of running a stream adapter on an incoming event.
+ *  Either "here are the actions to run" or "this needs human review with reason X". */
+export type AdapterResult =
+  | { kind: "actions"; actions: ActionSpec[] }
+  | { kind: "review"; reason: string };
+
+/** Pure function: incoming event → either actions or a review reason.
+ *  Adapters never hit the database or call services. */
+export type StreamAdapter = (event: IncomingEvent) => AdapterResult;
+
+/** Service execution result. ok=true means the side effect was simulated;
+ *  ok=false captures a deterministic failure (e.g. simulate_failure flag). */
+export type ServiceExecution =
+  | { ok: true; result?: Record<string, unknown> }
+  | { ok: false; error: string };
+
+/** Mock service: given an action spec + originating event, simulate the
+ *  side effect. Throws are caught by the engine and converted to ok=false. */
+export type MockService = (
+  action: ActionSpec,
+  event: IncomingEvent,
+) => Promise<ServiceExecution>;
