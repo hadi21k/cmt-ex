@@ -20,7 +20,9 @@ export const financeopsInvoiceOverdueAdapter: StreamAdapter = (event) => {
   const parsed = payloadSchema.safeParse(event.payload);
   if (!parsed.success) {
     const missing = parsed.error.issues
-      .filter((i) => i.code === "invalid_type" && "received" in i && i.received === "undefined")
+      .filter(
+        (i) => i.code === "invalid_type" && /received undefined/.test(i.message),
+      )
       .map((i) => i.path.join("."));
     if (missing.length > 0) {
       return {

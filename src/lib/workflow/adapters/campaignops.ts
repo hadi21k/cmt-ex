@@ -27,8 +27,7 @@ export const campaignopsClientBriefAdapter: StreamAdapter = (event) => {
   if (!parsed.success) {
     const missing = parsed.error.issues
       .filter(
-        (i) =>
-          i.code === "invalid_type" && "received" in i && i.received === "undefined",
+        (i) => i.code === "invalid_type" && /received undefined/.test(i.message),
       )
       .map((i) => i.path.join("."));
     if (missing.length > 0) {
