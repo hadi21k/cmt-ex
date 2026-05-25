@@ -1,8 +1,8 @@
 "use client";
 
 import * as React from "react";
+import Image from "next/image";
 import {
-  CommandIcon,
   LayoutDashboardIcon,
   InboxIcon,
   BeakerIcon,
@@ -50,7 +50,14 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
               className="data-[slot=sidebar-menu-button]:p-1.5!"
               render={<a href="/" />}
             >
-              <CommandIcon className="size-5!" />
+              <Image
+                src="/cmt-logo.png"
+                alt="C. Monkey Tribe"
+                width={20}
+                height={20}
+                className="size-5!"
+                priority
+              />
               <span className="text-base font-semibold">
                 Operations CC
               </span>

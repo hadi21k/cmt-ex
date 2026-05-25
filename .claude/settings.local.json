@@ -1,0 +1,13 @@
+{
+  "permissions": {
+    "allow": [
+      "Read(//home/ubuntu/Desktop/learning/workspace/flow/.claude/agents/**)",
+      "Read(//home/ubuntu/Desktop/learning/workspace/flow/.claude/skills/**)",
+      "mcp__chrome-devtools__take_screenshot"
+    ]
+  },
+  "enableAllProjectMcpServers": true,
+  "enabledMcpjsonServers": [
+    "shadcn"
+  ]
+}
