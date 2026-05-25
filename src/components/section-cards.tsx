@@ -4,46 +4,50 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
+import type { EventStatus } from "@/lib/workflow/types";
 
-// TODO: wire to Supabase events query in next implement.
-//
-// Real shape (server component):
-//   const supabase = await createClient();
-//   const { data } = await supabase
-//     .from('events')
-//     .select('status', { count: 'exact' });
-//   const counts = countByStatus(data);
-//
-// Values stay at 0 until that's wired so the dashboard never shows
-// fake numbers (spec §3: "numbers should come from stored data, not
-// static placeholders").
+// Four metric cards: total / completed / needs review / failed.
+// Counts come from a Supabase aggregation in src/app/page.tsx.
+// The numbers carry hierarchy via design.md `title` weight (700) so the
+// metric reads loud against the description label, per spec §3 ("real
+// counts, never placeholders").
 
-type MetricKey = "total" | "completed" | "review_required" | "failed";
+export type DashboardCounts = Record<EventStatus | "total", number>;
 
-const METRICS: Array<{ key: MetricKey; label: string }> = [
+const METRICS: Array<{
+  key: keyof DashboardCounts;
+  label: string;
+  hint?: string;
+}> = [
   { key: "total", label: "Total events" },
-  { key: "completed", label: "Completed" },
-  { key: "review_required", label: "Needs review" },
-  { key: "failed", label: "Failed" },
+  { key: "completed", label: "Completed", hint: "auto-handled by the engine" },
+  { key: "review_required", label: "Needs review", hint: "operator action required" },
+  { key: "failed", label: "Failed", hint: "service errors" },
 ];
 
-export function SectionCards() {
-  const counts: Record<MetricKey, number> = {
-    total: 0,
-    completed: 0,
-    review_required: 0,
-    failed: 0,
-  };
-
+export function SectionCards({ counts }: { counts: DashboardCounts }) {
   return (
     <div className="grid grid-cols-1 gap-4 px-4 lg:px-6 @xl/main:grid-cols-2 @5xl/main:grid-cols-4">
-      {METRICS.map(({ key, label }) => (
+      {METRICS.map(({ key, label, hint }) => (
         <Card key={key} className="@container/card">
           <CardHeader>
-            <CardDescription>{label}</CardDescription>
-            <CardTitle className="text-2xl font-semibold tabular-nums @[250px]/card:text-3xl">
+            <CardDescription className="text-[13px] tracking-[0.5px] uppercase">
+              {label}
+            </CardDescription>
+            <CardTitle
+              className="text-[40px] leading-none font-bold tabular-nums"
+              style={{ color: "#2E2A39" }}
+            >
               {counts[key]}
             </CardTitle>
+            {hint ? (
+              <p
+                className="mt-2 text-[13px]"
+                style={{ color: "rgba(46, 42, 57, 0.6)" }}
+              >
+                {hint}
+              </p>
+            ) : null}
           </CardHeader>
         </Card>
       ))}
