@@ -10,6 +10,8 @@ The master spec for this project lives outside the repo, in the flow vault:
 
 Project metadata, goals, constraints, and open questions live in `../workspace/flow/vault/projects/operations-command-center/CONTEXT.md`. The active implement plan tracking foundation work is at `../workspace/flow/vault/implement/setup-and-scaffold.md`.
 
+The design system for this dashboard (tokens, components, do's and don'ts, extracted from cmonkeytribe.com and retargeted for product register) lives at `../workspace/flow/vault/projects/operations-command-center/design.md`. Read it before building any UI.
+
 ## Quick reference (do not drift from spec)
 
 ### Required pages (5)
@@ -110,6 +112,7 @@ Next.js 16 has multiple breaking changes from training data. Verify against `nod
 ## Files to consult before non-trivial work
 
 - `requirements.md` (master spec — link above)
+- `design.md` (design system, link in Source of truth section)
 - `node_modules/next/dist/docs/01-app/01-getting-started/07-mutating-data.md` (Server Actions)
 - `node_modules/next/dist/docs/01-app/02-guides/upgrading/version-16.md` (every breaking change)
 
