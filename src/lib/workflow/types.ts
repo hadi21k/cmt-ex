@@ -23,8 +23,15 @@ export type EventStatus =
  *  "unknown" is the catch-all routed straight to human review. */
 export type EventSource = "financeops" | "campaignops" | "guestops" | "unknown";
 
-/** Lifecycle of a single generated action. Mirrors the migration's CHECK. */
-export type ActionStatus = "pending" | "executing" | "completed" | "failed";
+/** Lifecycle of a single generated action. Mirrors the migration's CHECK.
+ *  `cancelled` is set when an operator rejects a review item — the action
+ *  was never executed but the row stays for audit. */
+export type ActionStatus =
+  | "pending"
+  | "executing"
+  | "completed"
+  | "failed"
+  | "cancelled";
 
 /** Lifecycle of a single review queue item. Mirrors the migration's CHECK. */
 export type ReviewStatus = "open" | "approved" | "rejected" | "resolved";

@@ -39,7 +39,7 @@ const KNOWN_SOURCES: EventSource[] = [
 
 const incomingEventSchema = z.object({
   source_event_id: z.string().min(1),
-  source: z.string().min(1),
+  source: z.enum(["financeops", "campaignops", "guestops", "unknown"]),
   event_type: z.string().min(1),
   payload: z.record(z.string(), z.unknown()),
 });
@@ -71,7 +71,7 @@ export async function processEvent(
       `Invalid event structure: ${validation.error.issues.map((i) => i.message).join("; ")}`,
     );
   }
-  const incoming = validation.data as IncomingEvent;
+  const incoming: IncomingEvent = validation.data;
   const supabase = await createClient();
 
   // Idempotency short-circuit. Spec §4 step 7.
