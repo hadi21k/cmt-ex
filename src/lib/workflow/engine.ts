@@ -2,8 +2,12 @@ import { z } from "zod";
 
 import { createClient } from "@/lib/supabase/server";
 
+import { campaignopsClientBriefAdapter } from "./adapters/campaignops";
 import { financeopsInvoiceOverdueAdapter } from "./adapters/financeops";
+import { guestopsReservationChangeAdapter } from "./adapters/guestops";
+import { mockCampaignService } from "./services/campaign";
 import { mockFinanceService } from "./services/finance";
+import { mockGuestService } from "./services/guest";
 import type {
   Action,
   ActionSpec,
@@ -44,12 +48,16 @@ const incomingEventSchema = z.object({
 // one new file in adapters/ + one new entry here.
 const adapters: Record<string, StreamAdapter> = {
   "financeops:invoice.overdue": financeopsInvoiceOverdueAdapter,
+  "campaignops:client_brief.received": campaignopsClientBriefAdapter,
+  "guestops:reservation.change_requested": guestopsReservationChangeAdapter,
 };
 
 // Service map keyed by source. Each service dispatches on action.type
 // internally for that stream's action set.
 const services: Partial<Record<EventSource, MockService>> = {
   financeops: mockFinanceService,
+  campaignops: mockCampaignService,
+  guestops: mockGuestService,
 };
 
 type Supabase = Awaited<ReturnType<typeof createClient>>;
