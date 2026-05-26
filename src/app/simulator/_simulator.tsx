@@ -75,6 +75,23 @@ const HAPPY_PATHS: Sample[] = [
 
 const EDGE_CASES: Sample[] = [
   {
+    id: "duplicate-finance",
+    label: "FinanceOps · duplicate event",
+    description: "Same source_event_id as the overdue invoice. Submit after sample 1 to trigger idempotency (no new actions).",
+    payload: {
+      source_event_id: "finance-001",
+      source: "financeops",
+      event_type: "invoice.overdue",
+      payload: {
+        invoice_id: "INV-9281",
+        customer_name: "Acme Trading",
+        amount: 4200,
+        currency: "USD",
+        days_overdue: 17,
+      },
+    },
+  },
+  {
     id: "ambiguous",
     label: "Unknown · ambiguous text",
     description: "Free-text message, unknown source → review",

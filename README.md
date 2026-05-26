@@ -80,6 +80,7 @@ The simulator at `/simulator` ships with the six Appendix A payloads loaded as o
 | Valid FinanceOps | `finance-001` | `completed`. Two actions (`send_payment_reminder`, `create_follow_up_task`), both `completed`, both `priority: high` (because `days_overdue: 17 > 14`). |
 | Valid CampaignOps | `campaign-001` | `completed`. Four actions: one `create_campaign_task` per channel (Instagram, email, landing page) + one `qa_review_task` (the spec §5.B bonus). |
 | Valid GuestOps | `guest-001` | `completed`. Two actions (`request_reservation_change`, `generate_guest_message`). Message starts `"Hi Maya, we received your request..."`. |
+| Duplicate FinanceOps | `finance-001` | Submit after the valid FinanceOps sample. Result preview shows the "Duplicate event" banner; the engine short-circuits via `UNIQUE(source_event_id)` so no new actions and no new service calls fire. This is the §10 idempotency requirement (test 4). |
 | Ambiguous | `unknown-001` | `review_required`. Review item with reason `"Unable to determine workflow stream."` (verbatim spec §6). No actions generated. |
 | Missing required field | `finance-002` | `review_required`. Review item with reason `"Missing required field: invoice_id"`. No actions generated, no service calls. |
 | Simulated failure | `campaign-002` | `failed` (NOT `completed`). Actions exist with status `failed`. Review item with reason containing `"simulate_failure"`. Visible on the dashboard's Failed counter. |
