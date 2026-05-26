@@ -122,6 +122,38 @@
   body {
     @apply bg-background text-foreground;
   }
+
+  /* Subtle scrollbar matching design.md elevation + hairline rules.
+   * Thin, ink-based opacity, transparent track, hover lifts the thumb's
+   * opacity. The 2 px transparent border + content-box background-clip
+   * creates internal padding so the thumb reads as 4 px at rest but the
+   * hit target stays 8 px. Firefox uses scrollbar-color/width; WebKit
+   * and Blink use the pseudo-elements below. Anywhere that opts out
+   * via the `.no-scrollbar` utility (e.g. shadcn's sidebar) wins. */
+  * {
+    scrollbar-width: thin;
+    scrollbar-color: rgba(14, 15, 12, 0.18) transparent;
+  }
+  *::-webkit-scrollbar {
+    width: 8px;
+    height: 8px;
+  }
+  *::-webkit-scrollbar-track {
+    background: transparent;
+  }
+  *::-webkit-scrollbar-thumb {
+    background-color: rgba(14, 15, 12, 0.18);
+    border-radius: 9999px;
+    border: 2px solid transparent;
+    background-clip: content-box;
+    transition: background-color 160ms cubic-bezier(0.22, 1, 0.36, 1);
+  }
+  *::-webkit-scrollbar-thumb:hover {
+    background-color: rgba(14, 15, 12, 0.35);
+  }
+  *::-webkit-scrollbar-corner {
+    background: transparent;
+  }
 }
 
 /* Button primitives per design.md §5. The class names are retained from

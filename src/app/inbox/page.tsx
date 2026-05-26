@@ -18,7 +18,9 @@ import { InboxFilters } from "./_filters";
 // status, created_at, plus filters on status / source. The
 // "review-required only" toggle is removed: Status:`Needs review` covers
 // it. Table collapsed to 3 columns (Event / Status / Created) so the
-// primary scan column carries the most information per row.
+// primary scan column carries the most information per row. Filters
+// live inside the table card as a header band so the whole thing reads
+// as one control panel.
 // Next 16: searchParams is async.
 
 interface InboxPageProps {
@@ -87,33 +89,43 @@ export default async function InboxPage({ searchParams }: InboxPageProps) {
           </p>
         </header>
 
-        <InboxFilters status={statusFilter} source={sourceFilter} />
-
-        {events.length === 0 ? (
-          <EmptyState />
-        ) : (
+        <div
+          className="overflow-hidden rounded-xl bg-white"
+          style={{ border: "1px solid rgba(14, 15, 12, 0.1)" }}
+        >
           <div
-            className="overflow-hidden rounded-xl border bg-white"
-            style={{ borderColor: "rgba(14, 15, 12, 0.1)" }}
+            className="px-4 py-4 lg:px-5"
+            style={{ borderBottom: "1px solid rgba(14, 15, 12, 0.08)" }}
           >
+            <InboxFilters status={statusFilter} source={sourceFilter} />
+          </div>
+
+          {events.length === 0 ? (
+            <EmptyState />
+          ) : (
             <Table>
               <TableHeader>
-                <TableRow style={{ backgroundColor: "#e8ebe6" }}>
+                {/* No colored header band here: when the table sits inside a
+                    card with a filter row above, the sage header from
+                    design.md §5 would double-band the top of the card. The
+                    column headers stay white-on-white, separated from the
+                    filter band and the data rows by ink-10% hairlines. */}
+                <TableRow>
                   <TableHead
-                    className="text-[14px] font-semibold"
-                    style={{ color: "#0e0f0c" }}
+                    className="text-[13px] font-semibold"
+                    style={{ color: "rgba(14, 15, 12, 0.65)" }}
                   >
                     Event
                   </TableHead>
                   <TableHead
-                    className="text-[14px] font-semibold"
-                    style={{ color: "#0e0f0c" }}
+                    className="w-[160px] text-[13px] font-semibold"
+                    style={{ color: "rgba(14, 15, 12, 0.65)" }}
                   >
                     Status
                   </TableHead>
                   <TableHead
-                    className="text-right text-[14px] font-semibold"
-                    style={{ color: "#0e0f0c" }}
+                    className="w-[200px] text-[13px] font-semibold"
+                    style={{ color: "rgba(14, 15, 12, 0.65)" }}
                   >
                     Created
                   </TableHead>
@@ -123,51 +135,55 @@ export default async function InboxPage({ searchParams }: InboxPageProps) {
                 {events.map((event) => (
                   <TableRow
                     key={event.id}
-                    className="cursor-pointer transition-colors hover:bg-secondary"
+                    className="group cursor-pointer transition-colors hover:bg-secondary"
                   >
-                    <TableCell>
-                      <Link
-                        href={`/events/${event.id}`}
-                        className="block"
-                        style={{ color: "#0e0f0c" }}
-                      >
-                        <p className="text-[16px] font-semibold leading-6">
-                          {SOURCE_LABEL[event.source]}{" "}
-                          <span
-                            className="font-mono text-[14px] font-normal"
-                            style={{ color: "rgba(14, 15, 12, 0.8)" }}
-                          >
-                            · {event.event_type}
-                          </span>
-                        </p>
+                    <TableCell className="py-3">
+                      <Link href={`/events/${event.id}`} className="block">
                         <p
-                          className="font-mono text-[13px] leading-5"
-                          style={{ color: "rgba(14, 15, 12, 0.6)" }}
+                          className="truncate font-mono text-[15px] font-semibold leading-5"
+                          style={{ color: "#0e0f0c" }}
                         >
                           {event.source_event_id}
                         </p>
+                        <p
+                          className="mt-0.5 truncate text-[13px] leading-5"
+                          style={{ color: "rgba(14, 15, 12, 0.6)" }}
+                        >
+                          <span className="font-medium">
+                            {SOURCE_LABEL[event.source]}
+                          </span>{" "}
+                          ·{" "}
+                          <span className="font-mono">{event.event_type}</span>
+                        </p>
                       </Link>
                     </TableCell>
-                    <TableCell>
+                    <TableCell className="w-[160px] py-3 whitespace-nowrap">
                       <Link href={`/events/${event.id}`} className="block">
                         <StatusChip status={event.status} />
                       </Link>
                     </TableCell>
-                    <TableCell className="text-right">
+                    <TableCell className="w-[200px] py-3 whitespace-nowrap">
                       <Link
                         href={`/events/${event.id}`}
-                        className="block text-[14px] tabular-nums"
+                        className="flex items-center justify-between gap-2 text-[14px] tabular-nums"
                         style={{ color: "rgba(14, 15, 12, 0.6)" }}
                       >
-                        {formatTime(event.created_at)}
+                        <span>{formatTime(event.created_at)}</span>
+                        <span
+                          aria-hidden
+                          className="opacity-0 transition-opacity duration-150 group-hover:opacity-100"
+                          style={{ color: "rgba(14, 15, 12, 0.7)" }}
+                        >
+                          →
+                        </span>
                       </Link>
                     </TableCell>
                   </TableRow>
                 ))}
               </TableBody>
             </Table>
-          </div>
-        )}
+          )}
+        </div>
       </div>
     </div>
   );
@@ -176,17 +192,22 @@ export default async function InboxPage({ searchParams }: InboxPageProps) {
 function EmptyState() {
   return (
     <div
-      className="rounded-xl px-6 py-10 text-center"
-      style={{
-        backgroundColor: "rgba(14, 15, 12, 0.02)",
-        color: "rgba(14, 15, 12, 0.6)",
-      }}
+      className="px-6 py-12 text-center"
+      style={{ color: "rgba(14, 15, 12, 0.65)" }}
     >
-      <p className="text-base font-medium" style={{ color: "#0e0f0c" }}>
+      <p className="text-[16px] font-semibold" style={{ color: "#0e0f0c" }}>
         No events match these filters.
       </p>
-      <p className="mt-1 text-sm">
-        Try clearing filters or submit a sample event in the simulator.
+      <p className="mt-1.5 text-sm leading-5">
+        Try clearing filters or{" "}
+        <Link
+          href="/simulator"
+          className="underline underline-offset-2"
+          style={{ color: "#0e0f0c" }}
+        >
+          submit a sample event in the simulator
+        </Link>
+        .
       </p>
     </div>
   );
