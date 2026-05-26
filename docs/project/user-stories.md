@@ -14,7 +14,7 @@ One person: the **internal operator**. The first human to notice when something 
 
 Day-in-the-life: they keep the dashboard open in a browser tab next to their email. When the review queue badge ticks up, they pivot to it. Otherwise the system runs itself.
 
-This is a single-user, single-tenant tool. No auth, no roles (spec §13). The user pill on the sidebar is just a label.
+This is a single-user, single-tenant tool. No auth, no roles (spec 13). The user pill on the sidebar is just a label.
 
 ## How events enter the system
 
@@ -50,7 +50,7 @@ These are the scenarios the system must handle. Every line of business logic exi
 **Expected flow:**
 
 1. Event arrives → routed to the CampaignOps adapter.
-2. Adapter generates one `create_campaign_task` action per channel (3 actions) + a final `qa_review_task` action (the bonus per spec §5.B).
+2. Adapter generates one `create_campaign_task` action per channel (3 actions) + a final `qa_review_task` action (the bonus per spec 5.B).
 3. `mockCampaignService` creates each task (pretend Asana / Trello).
 4. Event status → `completed`.
 
@@ -106,7 +106,7 @@ These are the scenarios the system must handle. Every line of business logic exi
 
 1. Event arrives → engine checks the source enum.
 2. `source: "unknown"` matches no adapter in the adapter map.
-3. Engine marks event `review_required` with reason "Unable to determine workflow stream" (quoted verbatim from spec §6).
+3. Engine marks event `review_required` with reason "Unable to determine workflow stream" (quoted verbatim from spec 6).
 4. No actions are generated. We don't know what the operator wants done.
 5. Audit log records the routing decision.
 
@@ -124,7 +124,7 @@ These are the scenarios the system must handle. Every line of business logic exi
 
 1. Event arrives → FinanceOps adapter generates the two actions normally.
 2. Engine calls `mockFinanceService.sendPaymentReminder()` → service throws (the `simulate_failure` flag triggers a deterministic error).
-3. Engine catches → marks the failed action `failed` and routes the event to `review_required` (spec §6: service failures enter the review queue; spec §4: `review_required` is the in-review state, `failed` is terminal after operator reject).
+3. Engine catches → marks the failed action `failed` and routes the event to `review_required` (spec 6: service failures enter the review queue; spec 4: `review_required` is the in-review state, `failed` is terminal after operator reject).
 4. Creates a review queue item with reason capturing the service name + error message.
 5. Audit log records the failure with the full error.
 6. Needs-review counter ticks up on the dashboard.
@@ -196,14 +196,14 @@ This is the entire UX. Each of the five pages serves one verb:
 
 ## Anti-stories (things the system should NOT do)
 
-These are spec'd or implied by spec §13 + §14, captured here so we don't drift:
+These are spec'd or implied by spec 13 + 14, captured here so we don't drift:
 
 - **Don't blindly automate ambiguous payloads.** UC5's payload could be guessed at - don't. Send it to review with a clear reason.
 - **Don't double-execute.** UC1 retried twice is still one reminder sent. Idempotency is non-negotiable.
 - **Don't silently swallow failures.** UC6 must be visible on the dashboard's Failed counter, on the inbox list, in the audit timeline, AND in the review queue.
-- **Don't add primary lime to status chips.** The primary lime CTA is the single per-screen action (Submit on simulator, Approve on review). Failure is `failed` status red (design.md §5), not lime.
-- **Don't add a classifier or any LLM.** Rule-based routing on `(source, event_type)` covers every spec example. Spec §13: "Complex AI features" is out of scope.
-- **Don't require auth.** Spec §13.
+- **Don't add primary lime to status chips.** The primary lime CTA is the single per-screen action (Submit on simulator, Approve on review). Failure is `failed` status red (design.md 5), not lime.
+- **Don't add a classifier or any LLM.** Rule-based routing on `(source, event_type)` covers every spec example. Spec 13: "Complex AI features" is out of scope.
+- **Don't require auth.** Spec 13.
 
 ## When to update this document
 

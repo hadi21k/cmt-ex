@@ -8,9 +8,9 @@ import type { ProcessResult } from "@/lib/workflow/types";
 
 // Server Actions are reachable via direct POST, not just through our UI.
 // Validate every field at the boundary regardless of UI guarantees.
-// Spec §4 step 1 + security baseline.
+// Spec 4 step 1 + security baseline.
 
-// Spec §4 step 2 enumerates the four valid sources. Anything else is the
+// Spec 4 step 2 enumerates the four valid sources. Anything else is the
 // upstream integration shipping garbage; reject at the boundary with a
 // clear validation error rather than DB CHECK violation. `unknown` itself
 // is a valid value - the engine routes it to review.

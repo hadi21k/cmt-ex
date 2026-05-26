@@ -12,7 +12,7 @@ import type {
   ReviewQueueItem,
 } from "@/lib/workflow/types";
 
-// Event detail per spec §3: original payload, detected stream, generated
+// Event detail per spec 3: original payload, detected stream, generated
 // actions + their statuses, review reason if any, audit timeline (newest
 // first per decision #6). Next 16 async params.
 // Header carries a one-line payload summary per source so a first-time

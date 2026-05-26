@@ -307,7 +307,7 @@ async function loadPendingActions(
   supabase: Supabase,
   eventId: string,
 ): Promise<Action[]> {
-  // Spec §6: "Approve the generated action." Approval runs the actions -
+  // Spec 6: "Approve the generated action." Approval runs the actions -
   // including ones the engine already tried and failed (service-failure
   // route). Completed actions stay completed; we only retry pending/failed.
   const { data, error } = await supabase

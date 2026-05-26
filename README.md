@@ -35,7 +35,7 @@ Supporting docs in [`docs/project/`](./docs/project/):
 - **Tailwind 4** - CSS-only config; no `tailwind.config.js`
 - **shadcn/ui v4** - `dashboard-01` block as the layout base, mock data stripped
 - **Supabase** (hosted) - `@supabase/supabase-js` + `@supabase/ssr` for SSR-safe clients
-- **Zod** - payload validation at system boundaries (spec §4.1)
+- **Zod** - payload validation at system boundaries (spec 4.1)
 - **Vitest** + jsdom + @testing-library/react - for the 6 mandatory tests
 
 Node `>=22.12.0` required (enforced via `engines.node`). The vitest 4 toolchain pulls rolldown which uses `node:util.styleText`, stable from Node 21.7 / 22.12.
@@ -78,12 +78,12 @@ The simulator at `/simulator` ships with the six Appendix A payloads loaded as o
 | Sample | `source_event_id` | Expected outcome |
 | --- | --- | --- |
 | Valid FinanceOps | `finance-001` | `completed`. Two actions (`send_payment_reminder`, `create_follow_up_task`), both `completed`, both `priority: high` (because `days_overdue: 17 > 14`). |
-| Valid CampaignOps | `campaign-001` | `completed`. Four actions: one `create_campaign_task` per channel (Instagram, email, landing page) + one `qa_review_task` (the spec §5.B bonus). |
+| Valid CampaignOps | `campaign-001` | `completed`. Four actions: one `create_campaign_task` per channel (Instagram, email, landing page) + one `qa_review_task` (the spec 5.B bonus). |
 | Valid GuestOps | `guest-001` | `completed`. Two actions (`request_reservation_change`, `generate_guest_message`). Message starts `"Hi Maya, we received your request..."`. |
-| Duplicate FinanceOps | `finance-001` | Submit after the valid FinanceOps sample. Result preview shows a red "Submission failed" validation error: *"An event with source_event_id 'finance-001' already exists. Edit the id to create a new event."* No new event row, no new actions, no service calls fire. The engine's `processEvent` itself stays idempotent (cached-return path for any future caller hitting it directly, e.g. a webhook handler retrying on a network blip) — only the operator-facing `submitEvent` server action converts duplicates to a validation error. This is the §10 idempotency requirement (test 4). |
-| Ambiguous | `unknown-001` | `review_required`. Review item with reason `"Unable to determine workflow stream."` (verbatim spec §6). No actions generated. |
+| Duplicate FinanceOps | `finance-001` | Submit after the valid FinanceOps sample. Result preview shows a red "Submission failed" validation error: *"An event with source_event_id 'finance-001' already exists. Edit the id to create a new event."* No new event row, no new actions, no service calls fire. The engine's `processEvent` itself stays idempotent (cached-return path for any future caller hitting it directly, e.g. a webhook handler retrying on a network blip) — only the operator-facing `submitEvent` server action converts duplicates to a validation error. This is the 10 idempotency requirement (test 4). |
+| Ambiguous | `unknown-001` | `review_required`. Review item with reason `"Unable to determine workflow stream."` (verbatim spec 6). No actions generated. |
 | Missing required field | `finance-002` | `review_required`. Review item with reason `"Missing required field: invoice_id"`. No actions generated, no service calls. |
-| Simulated failure | `campaign-002` | `failed` status (per spec §4: "the event failed in a way that is visible and auditable", and §8: not `completed`). Actions exist with status `failed`. A `review_queue_items` row is also created so the operator can acknowledge or mark resolved (spec §4 step 8 + §6). Visible on the dashboard's Failed counter and listed on `/review`. |
+| Simulated failure | `campaign-002` | `failed` status (per spec 4: "the event failed in a way that is visible and auditable", and 8: not `completed`). Actions exist with status `failed`. A `review_queue_items` row is also created so the operator can acknowledge or mark resolved (spec 4 step 8 + 6). Visible on the dashboard's Failed counter and listed on `/review`. |
 
 Submitting the same payload twice with the same `source_event_id` is a no-op: the engine short-circuits, returns the prior result, and no duplicate actions or service calls fire. This is the idempotency contract test (test 4).
 
@@ -93,7 +93,7 @@ Five layers, each with one job. The engine is the orchestrator; adapters are pur
 
 - **Workflow engine** (`src/lib/workflow/engine.ts`). `processEvent(IncomingEvent) → ProcessResult`. Six-step contract: validate with zod → check idempotency (`SELECT` by `source_event_id`) → insert event → route by `(source, event_type)` against the adapter map → run the adapter → execute each action through the matching mock service → persist actions and statuses → emit an audit log entry at every transition.
 - **Stream adapters** (`src/lib/workflow/adapters/`). One file per stream. Pure functions: `(event) => { kind: 'actions', actions: ActionSpec[] } | { kind: 'review', reason: string }`. No I/O, no service calls. Adding a fourth stream is dropping a new file here, adding a row to the engine's adapter map, and adding the source value to `EventSource` in `types.ts` + the `events_source_check` constraint in a new migration. No other code changes.
-- **Mock services** (`src/lib/workflow/services/`). One file per stream. Dispatch on `action.type` internally. Honour `simulate_failure` by throwing a deterministic error when the flag is in the event payload (per spec §8). Async.
+- **Mock services** (`src/lib/workflow/services/`). One file per stream. Dispatch on `action.type` internally. Honour `simulate_failure` by throwing a deterministic error when the flag is in the event payload (per spec 8). Async.
 - **Persistence** (Supabase: `events`, `actions`, `review_queue_items`, `audit_logs`). `UNIQUE(events.source_event_id)` is the hard idempotency contract. Foreign keys + CHECK constraints on status enums enforce the state machine at the DB layer.
 - **Review flow** (`src/app/_actions/resolveReviewItem.ts`). When the adapter returns `{ kind: 'review' }`, when the source is unknown, when a service throws, or when an operator clicks Reject - a `review_queue_items` row is created. The operator has five verbs: `approve` (transitions `review_required → processing → completed/failed`, executes pending actions), `reject` (cancels pending actions, marks event `failed`), `edit_action` (mutates `action.payload` pre-execution), `add_notes` (appends to `resolution_notes`), `mark_resolved` (closes with `resolved_at`). Every verb writes to `audit_logs`.
 
@@ -118,8 +118,8 @@ src/
     app-sidebar.tsx       # Nav wired to the 5 ops routes
     section-cards.tsx     # 4 metric cards (Total/Completed/Review/Failed)
     chart-area-interactive.tsx  # "Recent activity" card
-    audit-timeline.tsx    # Vertical timeline per design.md §5 (1px ink at 25% alpha trunk)
-    status-chip.tsx       # 5 status variants per design.md §5 (lime is reserved for the primary CTA, never status)
+    audit-timeline.tsx    # Vertical timeline per design.md 5 (1px ink at 25% alpha trunk)
+    status-chip.tsx       # 5 status variants per design.md 5 (lime is reserved for the primary CTA, never status)
   lib/
     supabase/
       client.ts           # Browser client (createBrowserClient)
@@ -153,7 +153,7 @@ Adding a fourth stream is the strong-submission signal the rubric explicitly pro
 Honest list of what was intentionally left out and why. Each item is a choice the timebox forced, not an oversight.
 
 - **No classifier, no LLM.** Routing is a static `(source, event_type) → adapter` map. Every Appendix A payload (and every reasonable extension) is decided by `source` + `event_type` strings. A classifier would route the same payloads to review the same way; it'd just add a moving part. The engine's lookup has a clean seam for a real classifier if one is ever needed (see Next steps).
-- **No auth, no roles.** Spec §13 says auth is out of scope. The user pill on the sidebar reads `Operator`, audit logs record `operator` as the actor. Adding real auth would touch the audit-log writer and the server actions' authorization checks, nothing else.
+- **No auth, no roles.** Spec 13 says auth is out of scope. The user pill on the sidebar reads `Operator`, audit logs record `operator` as the actor. Adding real auth would touch the audit-log writer and the server actions' authorization checks, nothing else.
 - **Single light theme.** `design.md` is a single-theme system (sage canvas + lime primary CTA + ink + the semantic palette). A dark variant would require re-deriving the chip palette and the surface contrast to keep elevation legible - deferred.
 - **Inbox filters are limited to status / source.** No date range, no full-text search. The Phase 6 UX pass also dropped the "review-required only" toggle (redundant with Status:`Needs review`); filter state is in URL search params already, so extending is additive.
 - **Action cancellation preserves the audit trail.** When an operator rejects a review item, pending actions transition to `cancelled` (a new value added to the `actions.status` CHECK in `supabase/migrations/20260525174905_actions_cancelled.sql`) rather than being deleted. The "what would have run" record is the audit value.
@@ -184,7 +184,7 @@ What I'd build next given another half-day, in priority order.
 
 ## Conventions
 
-- **Package manager:** `npm`. Never `pnpm`, `yarn`, or `bun`.
+- **Package manager:** `npm` (the repo's `package-lock.json` is the lockfile).
 - **Workflow engine:** `src/lib/workflow/`. New streams = new file in `adapters/`.
 - **Server actions:** `src/app/_actions/`. One file per top-level operation. The underscore is load-bearing (Next 16 private folder).
 - **Supabase clients:** `src/lib/supabase/client.ts` (browser) + `server.ts` (SSR via `@supabase/ssr`).

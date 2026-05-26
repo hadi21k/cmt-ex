@@ -5,7 +5,7 @@ import { useCallback } from "react";
 
 import type { EventSource, EventStatus } from "@/lib/workflow/types";
 
-// Inbox filter chips per design.md §5 (Filter Chips). State lives in
+// Inbox filter chips per design.md 5 (Filter Chips). State lives in
 // the URL (?status=...&source=...) so filters survive refresh and are
 // shareable. Selecting a chip toggles it off when already active.
 // The rectangular ink-polarity treatment is deliberately distinct from

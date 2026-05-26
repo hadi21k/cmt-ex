@@ -14,7 +14,7 @@ import type { Event, EventSource, EventStatus } from "@/lib/workflow/types";
 
 import { InboxFilters } from "./_filters";
 
-// Inbox per spec §3. Lists events with source_event_id, stream, type,
+// Inbox per spec 3. Lists events with source_event_id, stream, type,
 // status, created_at, plus filters on status / source. The
 // "review-required only" toggle is removed: Status:`Needs review` covers
 // it. Table collapsed to 3 columns (Event / Status / Created) so the
@@ -107,7 +107,7 @@ export default async function InboxPage({ searchParams }: InboxPageProps) {
               <TableHeader>
                 {/* No colored header band here: when the table sits inside a
                     card with a filter row above, the sage header from
-                    design.md §5 would double-band the top of the card. The
+                    design.md 5 would double-band the top of the card. The
                     column headers stay white-on-white, separated from the
                     filter band and the data rows by ink-10% hairlines. */}
                 <TableRow>

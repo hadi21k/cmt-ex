@@ -3,7 +3,7 @@ import { z } from "zod";
 import type { ActionSpec, StreamAdapter } from "../types";
 
 // GuestOps adapter. Handles `reservation.change_requested` events.
-// Spec §5.C:
+// Spec 5.C:
 //   - Validate reservation_id, guest_name, requested_check_in are present.
 //   - Missing required fields → review_required (not auto-completed).
 //   - Generate request_reservation_change + generate_guest_message.

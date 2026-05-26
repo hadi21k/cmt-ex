@@ -7,7 +7,7 @@ import {
   SidebarMenuItem,
 } from "@/components/ui/sidebar";
 
-// Auth is out of scope for this exercise (spec §13). The user pill is a
+// Auth is out of scope for this exercise (spec 13). The user pill is a
 // passive display only - no dropdown actions, since Account / Billing /
 // Notifications / Log out would all be dead links. Re-add a dropdown when
 // real auth lands.

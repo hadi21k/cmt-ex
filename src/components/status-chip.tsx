@@ -1,6 +1,6 @@
 import type { EventStatus } from "@/lib/workflow/types";
 
-// Status chip per design.md §5. Five variants in a separate role layer
+// Status chip per design.md 5. Five variants in a separate role layer
 // from the brand pair. Primary lime never appears as a status color
 // (it stays reserved for the One Primary CTA per screen). Pill shape,
 // 4px x 12px padding, 14px label at weight 600.

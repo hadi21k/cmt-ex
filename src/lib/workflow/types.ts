@@ -2,16 +2,16 @@
  * Workflow engine types.
  *
  * Source of truth: `vault/projects/operations-command-center/requirements.md`.
- * - Statuses come from spec §4 ("Statuses" table).
- * - Sources and entity field shapes come from spec §7 ("Persistence and Data Model")
- *   and §5 ("Required Workflows").
+ * - Statuses come from spec 4 ("Statuses" table).
+ * - Sources and entity field shapes come from spec 7 ("Persistence and Data Model")
+ *   and 5 ("Required Workflows").
  *
  * Keep these in sync with the SQL migration at `supabase/migrations/`.
  * If you add a fifth status, add it to both the union here and the CHECK
  * constraint in the migration.
  */
 
-/** Lifecycle of a single incoming event. Spec §4. */
+/** Lifecycle of a single incoming event. Spec 4. */
 export type EventStatus =
   | "received"
   | "processing"
@@ -19,7 +19,7 @@ export type EventStatus =
   | "review_required"
   | "failed";
 
-/** Which upstream system the event came from. Spec §2 + §5.
+/** Which upstream system the event came from. Spec 2 + 5.
  *  "unknown" is the catch-all routed straight to human review. */
 export type EventSource = "financeops" | "campaignops" | "guestops" | "unknown";
 
@@ -49,7 +49,7 @@ export interface IncomingEvent {
   payload: Record<string, unknown>;
 }
 
-/** Row in the `events` table. Mirrors spec §7 fields. */
+/** Row in the `events` table. Mirrors spec 7 fields. */
 export interface Event {
   id: string;
   source_event_id: string;
@@ -98,7 +98,7 @@ export interface AuditLog {
  *
  * `existed: true` means the engine's idempotency short-circuit returned a
  * prior result for an already-seen `source_event_id`. No new event row, no
- * new actions, no service re-execution. Spec §4 step 7.
+ * new actions, no service re-execution. Spec 4 step 7.
  */
 export interface ProcessResult {
   event: Event;

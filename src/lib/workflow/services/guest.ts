@@ -1,7 +1,7 @@
 import type { MockService, ServiceExecution } from "../types";
 
 // mockGuestService: pretends to request reservation changes and
-// prepare guest-facing confirmation messages. Spec §8.
+// prepare guest-facing confirmation messages. Spec 8.
 
 export const mockGuestService: MockService = async (action, event) => {
   if (event.payload.simulate_failure === true) {

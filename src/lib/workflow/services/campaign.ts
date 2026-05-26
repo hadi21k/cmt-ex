@@ -1,7 +1,7 @@
 import type { MockService, ServiceExecution } from "../types";
 
 // mockCampaignService: pretends to create internal campaign tasks
-// (think Asana, Trello, Notion). Spec §8.
+// (think Asana, Trello, Notion). Spec 8.
 
 export const mockCampaignService: MockService = async (action, event) => {
   if (event.payload.simulate_failure === true) {

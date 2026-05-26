@@ -8,7 +8,7 @@ import {
 import { createClient } from "@/lib/supabase/server";
 import type { Event, EventStatus } from "@/lib/workflow/types";
 
-// Dashboard root. Spec §3: total / completed / needs review / failed
+// Dashboard root. Spec 3: total / completed / needs review / failed
 // counts come from stored data, never static placeholders, plus a
 // recent-activity list. Header carries the system definition (so a
 // first-time reviewer can answer "what is this app?" in 5 seconds)

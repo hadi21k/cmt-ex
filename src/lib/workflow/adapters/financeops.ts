@@ -3,7 +3,7 @@ import { z } from "zod";
 import type { ActionSpec, StreamAdapter } from "../types";
 
 // FinanceOps adapter. Handles `invoice.overdue` events.
-// Spec §5.A:
+// Spec 5.A:
 //   - Create a payment reminder action.
 //   - Create a follow-up task.
 //   - Priority `high` if days_overdue > 14, else `normal`.

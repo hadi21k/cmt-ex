@@ -3,7 +3,7 @@ import { z } from "zod";
 import type { ActionSpec, StreamAdapter } from "../types";
 
 // CampaignOps adapter. Handles `client_brief.received` events.
-// Spec §5.B:
+// Spec 5.B:
 //   - One create_campaign_task action per channel.
 //   - Sensible title.
 //   - Deadline carried on each task.
@@ -53,7 +53,7 @@ export const campaignopsClientBriefAdapter: StreamAdapter = (event) => {
     },
   }));
 
-  // QA bonus task. Spec §5.B "Optional bonus: add a final QA task."
+  // QA bonus task. Spec 5.B "Optional bonus: add a final QA task."
   const qaTask: ActionSpec = {
     type: "qa_review_task",
     payload: {

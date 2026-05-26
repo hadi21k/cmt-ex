@@ -1,9 +1,9 @@
 import type { AuditLog } from "@/lib/workflow/types";
 
-// Audit timeline per design.md §5 (signature component). Vertical list,
+// Audit timeline per design.md 5 (signature component). Vertical list,
 // 1px ink-at-25%-alpha hairline trunk on the left, body-md-strong
 // message in center, optional metadata line below. No card wrapper,
-// sits on the page tonal field directly. Spec §3: "audit timeline
+// sits on the page tonal field directly. Spec 3: "audit timeline
 // must be useful, not decorative."
 
 interface AuditTimelineProps {

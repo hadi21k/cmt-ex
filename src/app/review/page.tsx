@@ -10,7 +10,7 @@ import type {
 import { ReviewShell } from "./_review-shell";
 import type { ReviewListItem } from "./_review-list";
 
-// Review queue per spec §6. Server component fetches all open items
+// Review queue per spec 6. Server component fetches all open items
 // with their events + pending/failed actions in one PostgREST query
 // (review_queue_items -> events -> actions, with the actions array
 // filtered to pending/failed inside the embed). Then the client shell

@@ -12,15 +12,15 @@ The engine (`../engine.ts`) does the routing, the persistence, and the failure h
 
 | File | Stream | Trigger `event_type` | Spec |
 | --- | --- | --- | --- |
-| `financeops.ts` | FinanceOps | `invoice.overdue` | §5.A |
-| `campaignops.ts` | CampaignOps | `client_brief.received` | §5.B |
-| `guestops.ts` | GuestOps | `reservation.change_requested` | §5.C |
+| `financeops.ts` | FinanceOps | `invoice.overdue` | 5.A |
+| `campaignops.ts` | CampaignOps | `client_brief.received` | 5.B |
+| `guestops.ts` | GuestOps | `reservation.change_requested` | 5.C |
 
 Each file exports a single function matching the `StreamAdapter` interface (defined alongside the engine). The engine looks adapters up by `source` from a static map; nothing reflective.
 
 ## Adding a fourth stream
 
-The submission rubric explicitly probes this (spec §14: "code structure makes it easy to add a fourth stream"). The recipe:
+The submission rubric explicitly probes this (spec 14: "code structure makes it easy to add a fourth stream"). The recipe:
 
 1. Drop a new file `adapters/<stream>.ts` exporting an adapter function with the same shape as the three above.
 2. Register it in the adapter map at the top of `engine.ts`.

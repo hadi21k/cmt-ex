@@ -1,20 +1,20 @@
 # Mock External Services
 
-Per spec §8, do NOT integrate with real external systems. Each stream has a mock service that pretends to do the side effect (send a reminder, create a task, request a reservation change) and returns a synthetic success/failure result.
+Per spec 8, do NOT integrate with real external systems. Each stream has a mock service that pretends to do the side effect (send a reminder, create a task, request a reservation change) and returns a synthetic success/failure result.
 
 ## Planned files (next implement)
 
 | File | Stream | Pretends to | Spec |
 | --- | --- | --- | --- |
-| `finance.ts` | `mockFinanceService` | Send payment reminders, create finance follow-ups | §8 |
-| `campaign.ts` | `mockCampaignService` | Create internal campaign tasks | §8 |
-| `guest.ts` | `mockGuestService` | Request reservation changes, prepare guest messages | §8 |
+| `finance.ts` | `mockFinanceService` | Send payment reminders, create finance follow-ups | 8 |
+| `campaign.ts` | `mockCampaignService` | Create internal campaign tasks | 8 |
+| `guest.ts` | `mockGuestService` | Request reservation changes, prepare guest messages | 8 |
 
 Each file exports a single function matching the `MockService` interface (defined alongside the engine). The engine looks services up by action `type`.
 
 ## The `simulate_failure` contract
 
-If the incoming event's payload has `"simulate_failure": true` (top-level), the relevant mock service MUST fail when invoked. Spec §8 wording:
+If the incoming event's payload has `"simulate_failure": true` (top-level), the relevant mock service MUST fail when invoked. Spec 8 wording:
 
 > When this flag appears, the relevant mock service should fail. The failure should be visible in the UI, recorded in the audit trail, and handled without incorrectly marking the event as `completed`.
 

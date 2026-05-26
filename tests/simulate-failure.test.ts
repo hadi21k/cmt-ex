@@ -31,13 +31,13 @@ describe("Simulated external failure (test 6)", () => {
   it("marks the event failed when the mock service throws, visible in UI + audit + review queue", async () => {
     const result = await processEvent(eventWithFailure);
 
-    // Spec §4 status `failed`: "failed in a way that is visible and auditable."
-    // Spec §8: never completed. Service failure lands the event in terminal
+    // Spec 4 status `failed`: "failed in a way that is visible and auditable."
+    // Spec 8: never completed. Service failure lands the event in terminal
     // `failed` status. The review_queue_items row still gets created so the
-    // operator can acknowledge it (spec §4 step 8 + §6), but the event status
+    // operator can acknowledge it (spec 4 step 8 + 6), but the event status
     // itself is `failed`, not `review_required`. Appendix B's checklist
     // separately requires "Mock service failure is visible and auditable"
-    // (the §4 failed-status definition wording), distinct from
+    // (the 4 failed-status definition wording), distinct from
     // "Invalid and ambiguous events go to review."
     expect(result.event.status).toBe("failed");
     expect(result.event.status).not.toBe("completed");

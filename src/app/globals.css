@@ -156,7 +156,7 @@
   }
 }
 
-/* Button primitives per design.md §5. The class names are retained from
+/* Button primitives per design.md 5. The class names are retained from
  * the previous design for low-friction migration; visuals are updated
  * to the new tokens (lime primary, ink-outlined secondary, transparent
  * ghost). 24 px pill geometry per the Friendliness rule. */
@@ -194,7 +194,7 @@
   cursor: not-allowed;
 }
 
-/* cta-secondary = button-secondary in design.md §5: sage-filled,
+/* cta-secondary = button-secondary in design.md 5: sage-filled,
  * ink text, 24 px pill. Used for non-destructive supporting actions
  * like "Mark resolved" in the review queue. */
 .cta-secondary {

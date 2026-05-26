@@ -10,7 +10,7 @@ import {
 } from "@/components/ui/card";
 import type { Event } from "@/lib/workflow/types";
 
-// Recent activity list per spec §3 ("recent activity"). Ten most recent
+// Recent activity list per spec 3 ("recent activity"). Ten most recent
 // events from any stream, newest-first (created_at desc), each row links
 // to the event detail page. Header gets a "View all in inbox" link so
 // the operator can pivot from the dashboard glance to the full list

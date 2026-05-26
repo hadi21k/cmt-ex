@@ -21,7 +21,7 @@ import type {
   StreamAdapter,
 } from "./types";
 
-// Engine flow (spec §4):
+// Engine flow (spec 4):
 //   1. Validate IncomingEvent shape.
 //   2. Idempotency: if source_event_id already exists, return prior result.
 //   3. Insert event (received). Audit.
@@ -74,7 +74,7 @@ export async function processEvent(
   const incoming: IncomingEvent = validation.data;
   const supabase = await createClient();
 
-  // Idempotency short-circuit. Spec §4 step 7.
+  // Idempotency short-circuit. Spec 4 step 7.
   const existing = await loadResultBySourceId(supabase, incoming.source_event_id);
   if (existing) return existing;
 
@@ -84,7 +84,7 @@ export async function processEvent(
     event_type: incoming.event_type,
   });
 
-  // Routing. Spec §4 step 2 + §6 (review reasons).
+  // Routing. Spec 4 step 2 + 6 (review reasons).
   const adapter = adapters[`${incoming.source}:${incoming.event_type}`];
   if (!adapter) {
     const reason = KNOWN_SOURCES.includes(incoming.source as EventSource)
@@ -138,9 +138,9 @@ export async function processEvent(
     return await loadResult(supabase, event.id);
   }
 
-  // At least one action failed. Spec §4 status `failed`: "The event failed in a
+  // At least one action failed. Spec 4 status `failed`: "The event failed in a
   // way that is visible and auditable." That fits a service failure exactly.
-  // Spec §4 step 8 + §6 still require a review_queue_items row so the operator
+  // Spec 4 step 8 + 6 still require a review_queue_items row so the operator
   // can acknowledge / mark resolved; the event status itself is terminal `failed`.
   // Appendix B distinguishes "Invalid and ambiguous events go to review" from
   // "Mock service failure is visible and auditable" as two separate checklist

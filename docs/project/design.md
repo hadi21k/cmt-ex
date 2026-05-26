@@ -194,7 +194,7 @@ The product personality is **calm authority**: a command surface that an operato
 - `{rounded.xl}` 24 px is the canonical card + button radius. Generous, friendly.
 - Sage `{colors.canvas-soft}` is the page background; white `{colors.canvas}` is reserved for cards within the sage band.
 - A full semantic palette (positive green, warning yellow, negative red), each with content / hover / active variants for in-product status.
-- A five-status palette mapping for the operator console: `received` / `processing` / `completed` / `review_required` / `failed`. Documented in §5 Status Chips.
+- A five-status palette mapping for the operator console: `received` / `processing` / `completed` / `review_required` / `failed`. Documented in 5 Status Chips.
 
 ## 2. Colors
 
@@ -234,7 +234,7 @@ A single-accent brand system on a sage-canvas field. Lime-green is the action vo
 
 **The One Primary Rule.** Lime-green is the *only* color used for primary action. There is exactly one lime element per screen at any time. If two actions would both deserve lime, the lesser becomes ghost or sage-secondary. Never use lime for status, hover state, charts, or icons. Its scarcity is the affordance.
 
-**The Two-Voice Rule.** Color hierarchy is ink (identity, history, "what is this") and lime (action, "what next"). Status colors live in a *separate* role layer documented in §5 Status Chips and never mix with the brand pair on the same element.
+**The Two-Voice Rule.** Color hierarchy is ink (identity, history, "what is this") and lime (action, "what next"). Status colors live in a *separate* role layer documented in 5 Status Chips and never mix with the brand pair on the same element.
 
 **The No Pure Black Rule.** Body copy uses `{colors.ink}` (`#0e0f0c`, near-black with olive warmth), not `#000`. Borders use ink at 10–15% alpha for hairlines. The system warms its blacks so the sage canvas reads as calm rather than industrial.
 
