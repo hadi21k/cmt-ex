@@ -83,7 +83,7 @@ The simulator at `/simulator` ships with the six Appendix A payloads loaded as o
 | Duplicate FinanceOps | `finance-001` | Submit after the valid FinanceOps sample. Result preview shows the "Duplicate event" banner; the engine short-circuits via `UNIQUE(source_event_id)` so no new actions and no new service calls fire. This is the §10 idempotency requirement (test 4). |
 | Ambiguous | `unknown-001` | `review_required`. Review item with reason `"Unable to determine workflow stream."` (verbatim spec §6). No actions generated. |
 | Missing required field | `finance-002` | `review_required`. Review item with reason `"Missing required field: invoice_id"`. No actions generated, no service calls. |
-| Simulated failure | `campaign-002` | `failed` (NOT `completed`). Actions exist with status `failed`. Review item with reason containing `"simulate_failure"`. Visible on the dashboard's Failed counter. |
+| Simulated failure | `campaign-002` | `failed` status (per spec §4: "the event failed in a way that is visible and auditable", and §8: not `completed`). Actions exist with status `failed`. A `review_queue_items` row is also created so the operator can acknowledge or mark resolved (spec §4 step 8 + §6). Visible on the dashboard's Failed counter and listed on `/review`. |
 
 Submitting the same payload twice with the same `source_event_id` is a no-op: the engine short-circuits, returns the prior result, and no duplicate actions or service calls fire. This is the idempotency contract test (test 4).
 

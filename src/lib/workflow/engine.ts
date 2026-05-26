@@ -138,11 +138,15 @@ export async function processEvent(
     return await loadResult(supabase, event.id);
   }
 
-  // At least one action failed. Spec §6: service failures enter the review
-  // queue. Spec §4 status definitions: review_required is the in-review
-  // state, failed is terminal (set later by operator reject).
-  await updateEventStatus(supabase, event.id, "review_required");
-  await addAuditLog(supabase, event.id, "Event routed to review: one or more actions failed", {
+  // At least one action failed. Spec §4 status `failed`: "The event failed in a
+  // way that is visible and auditable." That fits a service failure exactly.
+  // Spec §4 step 8 + §6 still require a review_queue_items row so the operator
+  // can acknowledge / mark resolved; the event status itself is terminal `failed`.
+  // Appendix B distinguishes "Invalid and ambiguous events go to review" from
+  // "Mock service failure is visible and auditable" as two separate checklist
+  // items, confirming service failures land in `failed`, not `review_required`.
+  await updateEventStatus(supabase, event.id, "failed");
+  await addAuditLog(supabase, event.id, "Event failed: one or more actions failed", {
     error: firstFailureReason,
   });
   await insertReviewQueueItem(
