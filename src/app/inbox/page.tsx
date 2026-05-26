@@ -135,7 +135,7 @@ export default async function InboxPage({ searchParams }: InboxPageProps) {
                 {events.map((event) => (
                   <TableRow
                     key={event.id}
-                    className="group cursor-pointer transition-colors hover:bg-secondary"
+                    className="group cursor-pointer transition-colors hover:bg-[rgba(14,15,12,0.04)]"
                   >
                     <TableCell className="py-3">
                       <Link href={`/events/${event.id}`} className="block">

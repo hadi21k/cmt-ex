@@ -12,9 +12,12 @@ import type { Event } from "@/lib/workflow/types";
 
 // Recent activity list per spec §3 ("recent activity"). Ten most recent
 // events from any stream, newest-first (created_at desc), each row links
-// to the event detail page. Empty state teaches the operator how to
-// populate the dashboard (use the simulator) - per impeccable product
-// reference: "Empty states that teach the interface, not 'nothing here'."
+// to the event detail page. Header gets a "View all in inbox" link so
+// the operator can pivot from the dashboard glance to the full list
+// without navigating through the sidebar. Empty state teaches the
+// operator how to populate the dashboard (use the simulator) - per
+// impeccable product reference: "Empty states that teach the interface,
+// not 'nothing here'."
 
 const SOURCE_LABEL: Record<string, string> = {
   financeops: "FinanceOps",
@@ -31,12 +34,25 @@ export function ChartAreaInteractive({ recent }: RecentActivityProps) {
   return (
     <Card className="@container/card">
       <CardHeader>
-        <CardTitle className="text-lg font-semibold tracking-normal">
-          Recent activity
-        </CardTitle>
-        <CardDescription>
-          The ten most recent events across all streams.
-        </CardDescription>
+        <div className="flex flex-wrap items-start justify-between gap-3">
+          <div className="flex flex-col gap-1">
+            <CardTitle className="text-lg font-semibold tracking-normal">
+              Recent activity
+            </CardTitle>
+            <CardDescription>
+              The ten most recent events across all streams.
+            </CardDescription>
+          </div>
+          {recent.length > 0 ? (
+            <Link
+              href="/inbox"
+              className="rounded-md px-2 py-1 text-[13px] font-semibold underline underline-offset-2 transition-colors hover:bg-secondary focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#9fe870]/55"
+              style={{ color: "#0e0f0c" }}
+            >
+              View all in inbox →
+            </Link>
+          ) : null}
+        </div>
       </CardHeader>
       <CardContent>
         {recent.length === 0 ? (
@@ -68,7 +84,7 @@ export function ChartAreaInteractive({ recent }: RecentActivityProps) {
               <li key={event.id}>
                 <Link
                   href={`/events/${event.id}`}
-                  className="grid grid-cols-[1fr_auto_auto] items-center gap-4 py-3 transition-colors hover:bg-secondary"
+                  className="group -mx-3 grid grid-cols-[1fr_auto_auto_auto] items-center gap-4 rounded-lg px-3 py-3 transition-colors hover:bg-[rgba(14,15,12,0.04)]"
                 >
                   <div className="min-w-0">
                     <p
@@ -84,7 +100,7 @@ export function ChartAreaInteractive({ recent }: RecentActivityProps) {
                       </span>
                     </p>
                     <p
-                      className="mt-0.5 truncate text-[13px]"
+                      className="mt-0.5 truncate font-mono text-[13px]"
                       style={{ color: "rgba(14, 15, 12, 0.6)" }}
                     >
                       {event.source_event_id}
@@ -92,12 +108,19 @@ export function ChartAreaInteractive({ recent }: RecentActivityProps) {
                   </div>
                   <StatusChip status={event.status} />
                   <time
-                    className="text-[13px] tabular-nums"
+                    className="whitespace-nowrap text-[13px] tabular-nums"
                     style={{ color: "rgba(14, 15, 12, 0.6)" }}
                     dateTime={event.created_at}
                   >
                     {formatRelative(event.created_at)}
                   </time>
+                  <span
+                    aria-hidden
+                    className="w-3 text-[15px] opacity-0 transition-opacity duration-150 group-hover:opacity-100"
+                    style={{ color: "rgba(14, 15, 12, 0.7)" }}
+                  >
+                    →
+                  </span>
                 </Link>
               </li>
             ))}

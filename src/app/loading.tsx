@@ -24,7 +24,13 @@ export default function DashboardLoading() {
                 className="flex flex-col gap-3 rounded-xl bg-white p-6"
                 style={{ border: "1px solid rgba(14, 15, 12, 0.1)" }}
               >
-                <div className="h-4 w-24 rounded-md bg-secondary" />
+                <div className="flex items-center gap-2">
+                  <span
+                    aria-hidden
+                    className="inline-block h-2 w-2 rounded-full bg-secondary"
+                  />
+                  <div className="h-4 w-24 rounded-md bg-secondary" />
+                </div>
                 <div className="h-9 w-16 rounded-md bg-secondary" />
               </div>
             ))}
@@ -34,8 +40,13 @@ export default function DashboardLoading() {
               className="flex flex-col gap-3 rounded-xl bg-white p-6"
               style={{ border: "1px solid rgba(14, 15, 12, 0.1)" }}
             >
-              <div className="h-5 w-32 rounded-md bg-secondary" />
-              <div className="h-3 w-64 rounded-md bg-secondary" />
+              <div className="flex flex-wrap items-start justify-between gap-3">
+                <div className="flex flex-col gap-2">
+                  <div className="h-5 w-32 rounded-md bg-secondary" />
+                  <div className="h-3 w-64 rounded-md bg-secondary" />
+                </div>
+                <div className="h-7 w-32 rounded-md bg-secondary" />
+              </div>
               <div className="flex flex-col gap-3 pt-3">
                 {Array.from({ length: 5 }).map((_, i) => (
                   <div key={i} className="flex items-center gap-4">
