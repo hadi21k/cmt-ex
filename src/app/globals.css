@@ -162,6 +162,9 @@
   cursor: not-allowed;
 }
 
+/* cta-secondary = button-secondary in design.md §5: sage-filled,
+ * ink text, 24 px pill. Used for non-destructive supporting actions
+ * like "Mark resolved" in the review queue. */
 .cta-secondary {
   display: inline-flex;
   align-items: center;
@@ -169,9 +172,8 @@
   height: 48px;
   padding-inline: 24px;
   border-radius: 24px;
-  background-color: #ffffff; /* canvas */
+  background-color: #e8ebe6; /* canvas-soft sage */
   color: #0e0f0c; /* ink */
-  border: 1px solid #0e0f0c; /* ink hairline */
   font-size: 16px;
   font-weight: 600;
   letter-spacing: 0;
@@ -180,7 +182,7 @@
     box-shadow 180ms cubic-bezier(0.22, 1, 0.36, 1);
 }
 .cta-secondary:hover:not(:disabled) {
-  background-color: #e8ebe6; /* canvas-soft */
+  background-color: #dde1da; /* slightly darker sage */
 }
 .cta-secondary:focus-visible {
   outline: none;

@@ -43,20 +43,17 @@ export function ReviewList({ items, selectedId, onSelect }: ReviewListProps) {
               type="button"
               onClick={() => onSelect(item.id)}
               aria-pressed={active}
-              className="group flex w-full flex-col gap-2 rounded-xl bg-white p-4 text-left transition-[border-color,box-shadow,background-color] duration-200 ease-[cubic-bezier(0.22,1,0.36,1)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#9fe870]/55 focus-visible:ring-offset-2 focus-visible:ring-offset-background"
+              className="group flex w-full flex-col gap-2 rounded-xl bg-white p-4 text-left transition-[border-color,background-color] duration-200 ease-[cubic-bezier(0.22,1,0.36,1)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#9fe870]/55 focus-visible:ring-offset-2 focus-visible:ring-offset-background"
               style={{
                 border: active
                   ? "1px solid #0e0f0c"
                   : "1px solid rgba(14, 15, 12, 0.1)",
-                boxShadow: active
-                  ? "0 4px 14px rgba(14, 15, 12, 0.12)"
-                  : "none",
               }}
             >
               <div className="flex items-start justify-between gap-3">
                 <span
-                  className="text-[11px] font-medium uppercase tracking-[0.6px]"
-                  style={{ color: "rgba(14, 15, 12, 0.6)" }}
+                  className="text-[14px] font-semibold leading-5"
+                  style={{ color: "rgba(14, 15, 12, 0.7)" }}
                 >
                   {SOURCE_LABEL[event.source]}
                 </span>
