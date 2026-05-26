@@ -31,7 +31,7 @@ export function ChartAreaInteractive({ recent }: RecentActivityProps) {
   return (
     <Card className="@container/card">
       <CardHeader>
-        <CardTitle className="text-lg font-medium tracking-normal">
+        <CardTitle className="text-lg font-semibold tracking-normal">
           Recent activity
         </CardTitle>
         <CardDescription>
@@ -68,7 +68,7 @@ export function ChartAreaInteractive({ recent }: RecentActivityProps) {
               <li key={event.id}>
                 <Link
                   href={`/events/${event.id}`}
-                  className="grid grid-cols-[1fr_auto_auto] items-center gap-4 py-3 transition-colors hover:bg-[rgba(0,0,0,0.02)]"
+                  className="grid grid-cols-[1fr_auto_auto] items-center gap-4 py-3 transition-colors hover:bg-secondary"
                 >
                   <div className="min-w-0">
                     <p

@@ -1,3 +1,5 @@
+import Link from "next/link";
+
 import { ChartAreaInteractive } from "@/components/chart-area-interactive";
 import {
   type DashboardCounts,
@@ -8,7 +10,9 @@ import type { Event, EventStatus } from "@/lib/workflow/types";
 
 // Dashboard root. Spec §3: total / completed / needs review / failed
 // counts come from stored data, never static placeholders, plus a
-// recent-activity list.
+// recent-activity list. Header carries the system definition (so a
+// first-time reviewer can answer "what is this app?" in 5 seconds)
+// plus the one primary CTA per design.md "One Primary Rule".
 
 export default async function DashboardPage() {
   const supabase = await createClient();
@@ -41,16 +45,21 @@ export default async function DashboardPage() {
     <div className="flex flex-1 flex-col">
       <div className="@container/main flex flex-1 flex-col gap-2">
         <div className="flex flex-col gap-4 py-4 md:gap-6 md:py-6">
-          <header className="flex flex-col gap-1 px-4 lg:px-6">
-            <h1 className="text-[32px] leading-tight tracking-tight text-foreground">
-              Dashboard
-            </h1>
-            <p
-              className="text-sm"
-              style={{ color: "rgba(14, 15, 12, 0.7)" }}
+          <header className="flex flex-col gap-4 px-4 sm:flex-row sm:items-start sm:justify-between lg:px-6">
+            <div className="flex flex-col gap-2">
+              <h1 className="text-[40px] leading-[1.1] font-black tracking-tight text-foreground">
+                Dashboard
+              </h1>
+              <p className="max-w-[65ch] text-base leading-6 text-foreground/75">
+                Inbound events from FinanceOps, CampaignOps, and GuestOps run through workflow adapters. Auto-handled when safe, escalated to review when not.
+              </p>
+            </div>
+            <Link
+              href="/simulator"
+              className="cta-primary shrink-0 self-start sm:self-auto"
             >
-              Operations across FinanceOps, CampaignOps, and GuestOps.
-            </p>
+              Submit a test event
+            </Link>
           </header>
           <SectionCards counts={counts} />
           <div className="px-4 lg:px-6">
