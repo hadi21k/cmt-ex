@@ -14,10 +14,11 @@ That file is the contract. `CLAUDE.md` at the repo root indexes its key requirem
 
 ## How this was built (reviewer pointer)
 
-The full build record lives in [`docs/implement/`](./docs/implement/) as two phased plans, each with goal, preconditions, postconditions, verification, and per-phase outcomes:
+The full build record lives in [`docs/implement/`](./docs/implement/) as three phased plans, each with goal, preconditions, postconditions, verification, and per-phase outcomes:
 
 - [`setup-and-scaffold.md`](./docs/implement/setup-and-scaffold.md) - foundation pass: CLAUDE.md spec index, Supabase schema migration, dashboard-01 shell with stripped mock data, design tokens, route placeholders, workflow engine skeleton, vitest smoke test, README.
 - [`workflows-and-pages.md`](./docs/implement/workflows-and-pages.md) - feature pass: workflow engine + three stream adapters + three mock services, `submitEvent` + `resolveReviewItem` server actions, all five pages wired to Supabase, audit timeline, status chips, and the six mandatory tests.
+- [`ux-clarity.md`](./docs/implement/ux-clarity.md) - design + comprehension pass: full design system swap (cream / teal / orange → lime / sage / ink, 24 px pill geometry, heavy-display + utility typography pair, 5-status palette decided), then per-page polish on all five routes (Dashboard anchor + CTA, Event Detail payload summary, Review reason banner promotion, Inbox column collapse, Simulator sample grouping). Closes with a code-reviewer pass that caught two WCAG / correctness HIGHs, both fixed in-phase.
 
 Supporting docs in [`docs/project/`](./docs/project/):
 
