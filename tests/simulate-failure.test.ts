@@ -9,7 +9,7 @@ vi.mock("@/lib/supabase/server", () => ({
 import { processEvent } from "@/lib/workflow/engine";
 import type { IncomingEvent } from "@/lib/workflow/types";
 
-// Appendix A "Simulated Failure Event" payload — simulate_failure: true.
+// Appendix A "Simulated Failure Event" payload - simulate_failure: true.
 const eventWithFailure: IncomingEvent = {
   source_event_id: "campaign-002",
   source: "campaignops",
@@ -28,11 +28,13 @@ describe("Simulated external failure (test 6)", () => {
     resetMockDb();
   });
 
-  it("marks the event failed when the mock service throws, visible in UI + audit + review queue", async () => {
+  it("routes the event to review when the mock service throws, visible in UI + audit + review queue", async () => {
     const result = await processEvent(eventWithFailure);
 
-    // Spec §8: "handled without incorrectly marking the event as completed."
-    expect(result.event.status).toBe("failed");
+    // Spec §6: service failures enter the review queue. Spec §4: the
+    // in-review status is review_required; failed is terminal (set later
+    // by operator reject). Spec §8: never completed.
+    expect(result.event.status).toBe("review_required");
     expect(result.event.status).not.toBe("completed");
 
     // Actions were generated but none executed cleanly.

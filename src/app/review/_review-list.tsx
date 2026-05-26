@@ -9,7 +9,7 @@ import type {
 } from "@/lib/workflow/types";
 
 // Compact left-column queue. One row per open review item, click to
-// select. Designed for an ops operator's scan-and-decide loop —
+// select. Designed for an ops operator's scan-and-decide loop -
 // source, event_type, age, and the underlying event status are visible
 // at a glance.
 

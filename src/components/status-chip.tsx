@@ -8,7 +8,7 @@ import type { EventStatus } from "@/lib/workflow/types";
 const VARIANTS: Record<EventStatus, { bg: string; text: string; border: string; label: string }> = {
   received: {
     bg: "#ffffff",
-    text: "#868685",
+    text: "#454745",
     border: "rgba(14, 15, 12, 0.10)",
     label: "Received",
   },

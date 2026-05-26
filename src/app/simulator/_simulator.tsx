@@ -6,7 +6,7 @@ import { useCallback, useState } from "react";
 import { submitEvent, type SubmitEventResult } from "@/app/_actions/submitEvent";
 import { StatusChip } from "@/components/status-chip";
 
-// Appendix A sample payloads — exact strings from the candidate spec.
+// Appendix A sample payloads - exact strings from the candidate spec.
 // Split into two labelled groups so an operator (or first-time reviewer)
 // learns the mental model: three streams work end to end, three edge
 // cases route to review or surface a failure. Picking a sample replaces

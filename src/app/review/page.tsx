@@ -33,7 +33,7 @@ export default async function ReviewPage() {
         .from("actions")
         .select()
         .eq("event_id", item.event_id)
-        .eq("status", "pending"),
+        .in("status", ["pending", "failed"]),
     ]);
     if (!eventRes.data) continue;
     withContext.push({

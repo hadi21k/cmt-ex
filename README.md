@@ -6,7 +6,7 @@ This repository is the candidate submission for a take-home exercise. All five r
 
 ## Source of truth
 
-The master spec — a verbatim transcription of the candidate-facing PDF — lives in this repo at:
+The master spec - a verbatim transcription of the candidate-facing PDF - lives in this repo at:
 
 [`docs/project/requirements.md`](./docs/project/requirements.md)
 
@@ -16,26 +16,26 @@ That file is the contract. `CLAUDE.md` at the repo root indexes its key requirem
 
 The full build record lives in [`docs/implement/`](./docs/implement/) as two phased plans, each with goal, preconditions, postconditions, verification, and per-phase outcomes:
 
-- [`setup-and-scaffold.md`](./docs/implement/setup-and-scaffold.md) — foundation pass: CLAUDE.md spec index, Supabase schema migration, dashboard-01 shell with stripped mock data, design tokens, route placeholders, workflow engine skeleton, vitest smoke test, README.
-- [`workflows-and-pages.md`](./docs/implement/workflows-and-pages.md) — feature pass: workflow engine + three stream adapters + three mock services, `submitEvent` + `resolveReviewItem` server actions, all five pages wired to Supabase, audit timeline, status chips, and the six mandatory tests.
+- [`setup-and-scaffold.md`](./docs/implement/setup-and-scaffold.md) - foundation pass: CLAUDE.md spec index, Supabase schema migration, dashboard-01 shell with stripped mock data, design tokens, route placeholders, workflow engine skeleton, vitest smoke test, README.
+- [`workflows-and-pages.md`](./docs/implement/workflows-and-pages.md) - feature pass: workflow engine + three stream adapters + three mock services, `submitEvent` + `resolveReviewItem` server actions, all five pages wired to Supabase, audit timeline, status chips, and the six mandatory tests.
 
 Supporting docs in [`docs/project/`](./docs/project/):
 
-- [`requirements.md`](./docs/project/requirements.md) — the candidate-facing PDF, verbatim.
-- [`user-stories.md`](./docs/project/user-stories.md) — the six end-to-end use cases, the operator's daily loop, the four-pillar rubric breakdown, and the code-mapping table.
-- [`design.md`](./docs/project/design.md) — design system (tokens, components, do's and don'ts).
-- [`CONTEXT.md`](./docs/project/CONTEXT.md) — project goals, constraints, decisions.
+- [`requirements.md`](./docs/project/requirements.md) - the candidate-facing PDF, verbatim.
+- [`user-stories.md`](./docs/project/user-stories.md) - the six end-to-end use cases, the operator's daily loop, the four-pillar rubric breakdown, and the code-mapping table.
+- [`design.md`](./docs/project/design.md) - design system (tokens, components, do's and don'ts).
+- [`CONTEXT.md`](./docs/project/CONTEXT.md) - project goals, constraints, decisions.
 
 ## Stack
 
-- **Next.js 16.2.6** — App Router, Turbopack default, Server Functions / Server Actions
+- **Next.js 16.2.6** - App Router, Turbopack default, Server Functions / Server Actions
 - **React 19.2.4**
 - **TypeScript 5**
-- **Tailwind 4** — CSS-only config; no `tailwind.config.js`
-- **shadcn/ui v4** — `dashboard-01` block as the layout base, mock data stripped
-- **Supabase** (hosted) — `@supabase/supabase-js` + `@supabase/ssr` for SSR-safe clients
-- **Zod** — payload validation at system boundaries (spec §4.1)
-- **Vitest** + jsdom + @testing-library/react — for the 6 mandatory tests
+- **Tailwind 4** - CSS-only config; no `tailwind.config.js`
+- **shadcn/ui v4** - `dashboard-01` block as the layout base, mock data stripped
+- **Supabase** (hosted) - `@supabase/supabase-js` + `@supabase/ssr` for SSR-safe clients
+- **Zod** - payload validation at system boundaries (spec §4.1)
+- **Vitest** + jsdom + @testing-library/react - for the 6 mandatory tests
 
 Node `>=22.12.0` required (enforced via `engines.node`). The vitest 4 toolchain pulls rolldown which uses `node:util.styleText`, stable from Node 21.7 / 22.12.
 
@@ -68,11 +68,11 @@ npm test                           # vitest run (CI-style)
 npm run test:watch                 # vitest (interactive)
 ```
 
-On a fresh database, the dashboard shows zero-value metric cards and an empty "Recent activity" card — there is no seed data and no mock content. Submit one of the [sample events](#sample-events) through the simulator (`/simulator`) to populate the dashboard, inbox, and review queue.
+On a fresh database, the dashboard shows zero-value metric cards and an empty "Recent activity" card - there is no seed data and no mock content. Submit one of the [sample events](#sample-events) through the simulator (`/simulator`) to populate the dashboard, inbox, and review queue.
 
 ## Sample events
 
-The simulator at `/simulator` ships with the six Appendix A payloads loaded as one-click samples. Paste, submit, and the result preview shows the engine's `ProcessResult`. Expected outcomes:
+The simulator at `/simulator` ships with the six Appendix A payloads loaded as one-click samples, split into "Happy paths" (3 streams that auto-handle) and "Edge cases" (3 that route to review or fail). Paste, submit, and the result preview shows the event status, the review reason if any, and a link to the full event detail. Expected outcomes:
 
 | Sample | `source_event_id` | Expected outcome |
 | --- | --- | --- |
@@ -93,7 +93,7 @@ Five layers, each with one job. The engine is the orchestrator; adapters are pur
 - **Stream adapters** (`src/lib/workflow/adapters/`). One file per stream. Pure functions: `(event) => { kind: 'actions', actions: ActionSpec[] } | { kind: 'review', reason: string }`. No I/O, no service calls. Adding a fourth stream is dropping a new file here, adding a row to the engine's adapter map, and adding the source value to `EventSource` in `types.ts` + the `events_source_check` constraint in a new migration. No other code changes.
 - **Mock services** (`src/lib/workflow/services/`). One file per stream. Dispatch on `action.type` internally. Honour `simulate_failure` by throwing a deterministic error when the flag is in the event payload (per spec §8). Async.
 - **Persistence** (Supabase: `events`, `actions`, `review_queue_items`, `audit_logs`). `UNIQUE(events.source_event_id)` is the hard idempotency contract. Foreign keys + CHECK constraints on status enums enforce the state machine at the DB layer.
-- **Review flow** (`src/app/_actions/resolveReviewItem.ts`). When the adapter returns `{ kind: 'review' }`, when the source is unknown, when a service throws, or when an operator clicks Reject — a `review_queue_items` row is created. The operator has five verbs: `approve` (transitions `review_required → processing → completed/failed`, executes pending actions), `reject` (cancels pending actions, marks event `failed`), `edit_action` (mutates `action.payload` pre-execution), `add_notes` (appends to `resolution_notes`), `mark_resolved` (closes with `resolved_at`). Every verb writes to `audit_logs`.
+- **Review flow** (`src/app/_actions/resolveReviewItem.ts`). When the adapter returns `{ kind: 'review' }`, when the source is unknown, when a service throws, or when an operator clicks Reject - a `review_queue_items` row is created. The operator has five verbs: `approve` (transitions `review_required → processing → completed/failed`, executes pending actions), `reject` (cancels pending actions, marks event `failed`), `edit_action` (mutates `action.payload` pre-execution), `add_notes` (appends to `resolution_notes`), `mark_resolved` (closes with `resolved_at`). Every verb writes to `audit_logs`.
 
 ## Project structure
 
@@ -116,8 +116,8 @@ src/
     app-sidebar.tsx       # Nav wired to the 5 ops routes
     section-cards.tsx     # 4 metric cards (Total/Completed/Review/Failed)
     chart-area-interactive.tsx  # "Recent activity" card
-    audit-timeline.tsx    # Vertical timeline per design.md §5 (1px teal trunk)
-    status-chip.tsx       # 5 status variants per design.md §5 (no orange on failed)
+    audit-timeline.tsx    # Vertical timeline per design.md §5 (1px ink at 25% alpha trunk)
+    status-chip.tsx       # 5 status variants per design.md §5 (lime is reserved for the primary CTA, never status)
   lib/
     supabase/
       client.ts           # Browser client (createBrowserClient)
@@ -152,14 +152,16 @@ Honest list of what was intentionally left out and why. Each item is a choice th
 
 - **No classifier, no LLM.** Routing is a static `(source, event_type) → adapter` map. Every Appendix A payload (and every reasonable extension) is decided by `source` + `event_type` strings. A classifier would route the same payloads to review the same way; it'd just add a moving part. The engine's lookup has a clean seam for a real classifier if one is ever needed (see Next steps).
 - **No auth, no roles.** Spec §13 says auth is out of scope. The user pill on the sidebar reads `Operator`, audit logs record `operator` as the actor. Adding real auth would touch the audit-log writer and the server actions' authorization checks, nothing else.
-- **Single light theme.** `design.md` is a single-theme system (cream surface + brand teal/orange + status chip palette). A dark variant would require re-deriving the chip palette to keep contrast — deferred.
-- **Inbox filters are limited to status / source / review-required.** No date range, no full-text search. The filter state is in URL search params already, so extending is additive.
+- **Single light theme.** `design.md` is a single-theme system (sage canvas + lime primary CTA + ink + the semantic palette). A dark variant would require re-deriving the chip palette and the surface contrast to keep elevation legible - deferred.
+- **Inbox filters are limited to status / source.** No date range, no full-text search. The Phase 6 UX pass also dropped the "review-required only" toggle (redundant with Status:`Needs review`); filter state is in URL search params already, so extending is additive.
 - **Action cancellation preserves the audit trail.** When an operator rejects a review item, pending actions transition to `cancelled` (a new value added to the `actions.status` CHECK in `supabase/migrations/20260525174905_actions_cancelled.sql`) rather than being deleted. The "what would have run" record is the audit value.
-- **One Orange on review cards = one per card, not per screen.** Each review card is treated as its own section per `design.md` §2's source pattern, so each card has one brand-orange Approve while Reject / Add notes / Mark resolved stay teal-outline or ghost. Documented in `docs/implement/workflows-and-pages.md` Phase 7 clarification.
-- **Raw error message stored in `review_queue_items.reason` on service failure.** Security-reviewer flagged this as LOW (L1) — for production the user-facing reason should be generic with the raw error in a structured ops-only field. The take-home benefits from the operator seeing the real message; production wouldn't.
+- **One Primary Rule = one lime CTA per screen.** The Phase 1 design.md adopts a single-accent system: lime is reserved for the per-screen primary action (Submit on simulator, Approve on review, "Submit a test event" on dashboard). Reject and Mark resolved take ghost / sage-secondary so the lime stays the operator's "next thing to do" beat. Status colors (positive / warning / negative) live in a separate role layer and never overlap with lime.
+- **Simulator result preview redirects to event detail.** The Phase 7 pass removed the inline Actions / Audit `<details>` accordions from the simulator's result card. The event detail page covers both; the "Open event detail" link on the result card is the next step. Keeps the simulator's submission feedback focused on outcome + status + review reason.
+- **`.cta-secondary` is sage-filled, not white + ink border.** Phase 5 repurposed the utility class to match design.md's `button-secondary` primitive (sage). Future consumers reaching for `.cta-secondary` will get a sage-filled treatment; if a white-outlined treatment is wanted, add a separate `.cta-tertiary` class (white + ink border is documented in design.md but not in `globals.css` yet).
+- **Raw error message stored in `review_queue_items.reason` on service failure.** Security-reviewer flagged this as LOW (L1) - for production the user-facing reason should be generic with the raw error in a structured ops-only field. The take-home benefits from the operator seeing the real message; production wouldn't.
 - **No transactional boundary around `processEvent`.** Inserts are sequential (event → actions → audit logs → status updates). Idempotency via `UNIQUE(source_event_id)` is the safe failure mode if a process dies mid-write; a clone won't see partial state because the second submission short-circuits on the SELECT. Production should wrap the writes in a Postgres function (RPC) for true atomicity. Security-reviewer L4.
 - **Missing-field detection parses zod error messages with a regex** (`/received undefined/`) instead of inspecting zod's structured issue codes. The shape of zod's `received` field changed between zod 3 and zod 4; the regex on the human-readable message is version-agnostic. Cleaner alternative: pre-check required-field presence before the schema parse.
-- **No webhook ingestion route yet.** The simulator is the only way events enter the system. The engine doesn't care whether the caller is a Server Action or an HTTP handler — adding `src/app/api/webhook/[source]/route.ts` would be one file calling the same `processEvent`.
+- **No webhook ingestion route yet.** The simulator is the only way events enter the system. The engine doesn't care whether the caller is a Server Action or an HTTP handler - adding `src/app/api/webhook/[source]/route.ts` would be one file calling the same `processEvent`.
 
 ## Next steps
 
@@ -175,6 +177,9 @@ What I'd build next given another half-day, in priority order.
 8. **Operator IDs on audit logs.** Currently stubbed `"operator"`. Real auth would feed real user IDs; the schema already has `audit_logs.metadata` as JSONB so no migration is needed.
 9. **More granular audit metadata.** Engine version, adapter version, service latency, retry count. Useful when the system grows past one stream version.
 10. **Collapse the review-queue N+1.** `src/app/review/page.tsx` issues one Supabase query for the open items, then two per item for the event + pending actions. Fine for a handful of open items; a single `select("*, events(*), actions(*)")` join (or an RPC) closes the loop at scale.
+11. **Style the `<details>` disclosure marker.** Action JSON disclosures on `/events/[id]` and the original-payload disclosure in `/review` rely on the browser-default `<summary>` chevron; renders inconsistently across Safari / Chrome / Firefox. Replace with `[&::-webkit-details-marker]:hidden list-none` plus a Tailwind `group-open` rotate chevron for a consistent look. Code-reviewer MEDIUM-2.
+12. **Add a "Custom payload" label on the simulator.** When the operator edits the JSON away from any sample (`activeId === ""`), no card is highlighted and no label communicates the state. A small inline tag near the editor would close the comprehension gap. Code-reviewer MEDIUM-5.
+13. **Investigate the `simulate-failure.test.ts` first-run flake.** The full suite hit a one-shot `expected 'failed', got 'review_required'` failure during the Phase 3 verify run; passed in isolation and on the second full-suite run. Likely a test-ordering race on the in-memory Supabase mock (`idCounter` / `timeCounter` not resetting cleanly if a prior test throws before `beforeEach` completes). Tracking down the root cause would tighten reliability.
 
 ## Conventions
 
@@ -187,4 +192,4 @@ What I'd build next given another half-day, in priority order.
 
 ## Design
 
-Two-color brand (teal `#12536B` for identity, orange `#ED5338` for the single per-screen CTA), cream surface, Helvetica/Arial, near-flat shadows, generous letter-spacing. Status chip palette and per-page typography land alongside the corresponding feature work. Full system in [`docs/project/design.md`](./docs/project/design.md).
+Single-accent brand: lime-green `#9fe870` for the one primary CTA per screen, sage canvas `#e8ebe6` as the page background, near-black ink `#0e0f0c` for typography, Inter weight 900 / 600 / 400 for the type ladder, generous 24 px pill geometry on cards and buttons. Status chips live in a separate role layer (positive / warning / negative semantic palette + two neutral chips for `received` and `processing`); lime never doubles as a status color. Filter chips use rectangular ink-polarity treatment so they stay visually distinct from the pill-shaped status chips. Surface contrast (sage canvas hosting white cards) is the elevation cue; shadows appear only as state response (hover, focus), never at rest. Full system in [`docs/project/design.md`](./docs/project/design.md).

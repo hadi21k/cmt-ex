@@ -27,7 +27,7 @@ The end state for a simulated-failure event:
 
 ## Why mocks at all
 
-The exercise is fictional; real integrations aren't allowed. The mocks also make the failure-path test (#6 of the 6 mandatory tests) deterministic — flip the flag, expect the failure path.
+The exercise is fictional; real integrations aren't allowed. The mocks also make the failure-path test (#6 of the 6 mandatory tests) deterministic - flip the flag, expect the failure path.
 
 ## Anti-patterns
 

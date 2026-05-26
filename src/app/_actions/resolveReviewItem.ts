@@ -16,16 +16,16 @@ import { createClient } from "@/lib/supabase/server";
 
 // resolveReviewItem: the operator's verbs on a review item.
 //
-//  approve       — run any pending actions through the service, transition
+//  approve       - run any pending actions through the service, transition
 //                  event review_required → processing → completed (or failed
 //                  if a service throws). Audit every step.
-//  reject        — mark pending actions cancelled, event → failed, review
+//  reject        - mark pending actions cancelled, event → failed, review
 //                  item → rejected with optional notes.
-//  edit_action   — mutate an action's payload before it runs. Status stays
+//  edit_action   - mutate an action's payload before it runs. Status stays
 //                  pending. Operator then needs to approve.
-//  add_notes     — append to review item's resolution_notes. Status stays
+//  add_notes     - append to review item's resolution_notes. Status stays
 //                  open.
-//  mark_resolved — review item → resolved + resolved_at. No engine action;
+//  mark_resolved - review item → resolved + resolved_at. No engine action;
 //                  used for "handled out of band".
 
 const services: Partial<Record<EventSource, MockService>> = {
@@ -99,7 +99,7 @@ async function dispatch(input: ResolveReviewItemInput): Promise<void> {
   const reviewItem = await loadReviewItem(supabase, input.review_item_id);
 
   // M1: every verb requires the review item to still be open. Once closed
-  // (approved / rejected / resolved) the state is terminal — re-submitting
+  // (approved / rejected / resolved) the state is terminal - re-submitting
   // an action against it is almost certainly a double-click or a stale UI
   // and should fail loudly rather than corrupt the audit trail.
   if (reviewItem.status !== "open") {
@@ -307,11 +307,14 @@ async function loadPendingActions(
   supabase: Supabase,
   eventId: string,
 ): Promise<Action[]> {
+  // Spec §6: "Approve the generated action." Approval runs the actions -
+  // including ones the engine already tried and failed (service-failure
+  // route). Completed actions stay completed; we only retry pending/failed.
   const { data, error } = await supabase
     .from("actions")
     .select()
     .eq("event_id", eventId)
-    .eq("status", "pending");
+    .in("status", ["pending", "failed"]);
   if (error) throw new Error(`loadPendingActions failed: ${error.message}`);
   return (data ?? []) as Action[];
 }

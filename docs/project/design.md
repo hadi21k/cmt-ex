@@ -274,9 +274,9 @@ Flat by default. The system uses surface contrast (sage canvas-soft band hosting
 
 ### Levels
 
-- **Level 0 — Flat.** No shadow, no border. Default for cards on the sage canvas. The white card on sage background IS the elevation.
-- **Level 1 — Hairline.** 1 px solid ink border (or ink at low alpha for soft hairlines). Used for tertiary outline buttons, text inputs, table row dividers.
-- **Level 2 — Soft Card.** Implicit Level 0 white card sitting on sage canvas. The surface contrast IS the elevation. No explicit shadow.
+- **Level 0 - Flat.** No shadow, no border. Default for cards on the sage canvas. The white card on sage background IS the elevation.
+- **Level 1 - Hairline.** 1 px solid ink border (or ink at low alpha for soft hairlines). Used for tertiary outline buttons, text inputs, table row dividers.
+- **Level 2 - Soft Card.** Implicit Level 0 white card sitting on sage canvas. The surface contrast IS the elevation. No explicit shadow.
 
 ### Shadow Vocabulary (state response only)
 
@@ -324,11 +324,11 @@ Flat by default. The system uses surface contrast (sage canvas-soft band hosting
 
 The semantic palette ships only 3 families (positive / warning / negative). The operator console needs 5 statuses; the mapping below extends the semantic palette with two neutral chips for `received` and `processing`. All chips: pill shape `{rounded.pill}`, padding `4px 12px`, label in `{typography.body-sm-strong}`.
 
-- **received** — bg `{colors.canvas}` white, text `{colors.mute}`, 1 px ink at 10% alpha border. Fresh, untouched.
-- **processing** — bg `{colors.canvas-soft}` sage, text `{colors.ink}`, 1 px ink at 15% alpha border. In-flight, neutral. Distinct from primary-pale to avoid confusion with the CTA.
-- **completed** — bg positive at 12% alpha, text `{colors.positive-deep}`, 1 px positive at 40% alpha border. Clear success.
-- **review_required** — bg warning at 20% alpha, text `{colors.warning-content}`, 1 px warning at 60% alpha border. Caution.
-- **failed** — bg negative at 12% alpha, text `{colors.negative-darkest}`, 1 px negative at 40% alpha border. **Never primary lime.** Lime is action, not failure.
+- **received** - bg `{colors.canvas}` white, text `{colors.mute}`, 1 px ink at 10% alpha border. Fresh, untouched.
+- **processing** - bg `{colors.canvas-soft}` sage, text `{colors.ink}`, 1 px ink at 15% alpha border. In-flight, neutral. Distinct from primary-pale to avoid confusion with the CTA.
+- **completed** - bg positive at 12% alpha, text `{colors.positive-deep}`, 1 px positive at 40% alpha border. Clear success.
+- **review_required** - bg warning at 20% alpha, text `{colors.warning-content}`, 1 px warning at 60% alpha border. Caution.
+- **failed** - bg negative at 12% alpha, text `{colors.negative-darkest}`, 1 px negative at 40% alpha border. **Never primary lime.** Lime is action, not failure.
 
 ### Audit Timeline (signature)
 
@@ -382,10 +382,10 @@ Inbox and simulator filter chips MUST use a visual treatment distinct from statu
 
 This system is purpose-built for the operator console. The vocabulary borrowed from a marketing-band heritage (heavy-display 900 hero scale, sage-canvas hosting white cards, lime-green CTA pill, 24 px pill geometry) translates almost unchanged: hero scale becomes empty-state-only, sage canvas becomes the dashboard's working surface, the lime CTA becomes the "next action" beat per screen. Four operator-only sections extend the heritage where it has no analog:
 
-1. **Status chip palette (5-status)** — the semantic palette ships only 3 families; we map two neutral chips for `received` and `processing`.
-2. **Tables** — operator dashboards are table-heavy; the marketing heritage has none. Specified above.
-3. **Audit timeline trunk** — signature operator extension. Ink-hairline running down the left column.
-4. **Filter chips** — operator extension. Rectangular ink-polarity treatment to stay visually distinct from status chips.
-5. **Focus ring** — accessibility primitive. Uses lime as the focus color.
+1. **Status chip palette (5-status)** - the semantic palette ships only 3 families; we map two neutral chips for `received` and `processing`.
+2. **Tables** - operator dashboards are table-heavy; the marketing heritage has none. Specified above.
+3. **Audit timeline trunk** - signature operator extension. Ink-hairline running down the left column.
+4. **Filter chips** - operator extension. Rectangular ink-polarity treatment to stay visually distinct from status chips.
+5. **Focus ring** - accessibility primitive. Uses lime as the focus color.
 
 Treat the operator-only sections as canonical extensions, not departures.

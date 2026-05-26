@@ -24,7 +24,7 @@ export type EventStatus =
 export type EventSource = "financeops" | "campaignops" | "guestops" | "unknown";
 
 /** Lifecycle of a single generated action. Mirrors the migration's CHECK.
- *  `cancelled` is set when an operator rejects a review item — the action
+ *  `cancelled` is set when an operator rejects a review item - the action
  *  was never executed but the row stays for audit. */
 export type ActionStatus =
   | "pending"

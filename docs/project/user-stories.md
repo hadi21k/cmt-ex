@@ -20,7 +20,7 @@ This is a single-user, single-tenant tool. No auth, no roles (spec §13). The us
 
 For this exercise: **the simulator** (`/simulator`). The operator (or a reviewer testing the app) pastes a JSON payload, optionally edits it, and submits.
 
-In the real-world version this same payload would arrive over a webhook from one of the three upstream business systems whenever something noteworthy happens (invoice goes overdue, brief lands, guest requests a change). The processing logic is identical either way — the engine doesn't care whether the caller is a Server Action from a form submit or an HTTP POST from a webhook. Adding a webhook route later is one file: `src/app/api/webhook/[source]/route.ts` calls the same `processEvent()` the simulator uses.
+In the real-world version this same payload would arrive over a webhook from one of the three upstream business systems whenever something noteworthy happens (invoice goes overdue, brief lands, guest requests a change). The processing logic is identical either way - the engine doesn't care whether the caller is a Server Action from a form submit or an HTTP POST from a webhook. Adding a webhook route later is one file: `src/app/api/webhook/[source]/route.ts` calls the same `processEvent()` the simulator uses.
 
 ## The six end-to-end use cases
 
@@ -65,7 +65,7 @@ These are the scenarios the system must handle. Every line of business logic exi
 **Expected flow:**
 
 1. Event arrives → routed to the GuestOps adapter.
-2. Adapter zod-validates required fields (`reservation_id`, `guest_name`, `requested_check_in`) — all present.
+2. Adapter zod-validates required fields (`reservation_id`, `guest_name`, `requested_check_in`) - all present.
 3. Adapter generates `request_reservation_change` + `generate_guest_message` (text: "Hi Maya, we received your request to change your check-in date to 2026-06-06.").
 4. `mockGuestService` executes both.
 5. Event status → `completed`.
@@ -76,7 +76,7 @@ These are the scenarios the system must handle. Every line of business logic exi
 
 ### Use case 4 - Reservation change missing a field (goes to review)
 
-**Story:** Same as use case 3 but `requested_check_in` is missing from the payload (the spec ships this as Appendix A's "Missing Required Field" example with `source_event_id: finance-002` — note the spec deliberately mislabels it on the finance side; we apply the same principle to any stream).
+**Story:** Same as use case 3 but `requested_check_in` is missing from the payload (the spec ships this as Appendix A's "Missing Required Field" example with `source_event_id: finance-002` - note the spec deliberately mislabels it on the finance side; we apply the same principle to any stream).
 
 **Expected flow:**
 
@@ -91,10 +91,10 @@ These are the scenarios the system must handle. Every line of business logic exi
 
 - Opens the review item, reads the reason and the original payload.
 - Three choices:
-  - **Approve as-is** — only valid if the payload is now actionable (unlikely without an edit).
-  - **Edit action(s)** — open the action JSON, fill in or fix the missing data, then approve. On approve: status transitions `review_required` → `processing` → `completed`, pending actions execute through the services.
-  - **Reject** — mark `rejected` with optional notes. Pending actions stay un-executed (the action-cancel approach is a Phase 5 decision: either marked `cancelled` if we add that enum value, or deleted).
-  - **Add notes + Mark resolved** — for "I called the guest, I handled this off-platform."
+  - **Approve as-is** - only valid if the payload is now actionable (unlikely without an edit).
+  - **Edit action(s)** - open the action JSON, fill in or fix the missing data, then approve. On approve: status transitions `review_required` → `processing` → `completed`, pending actions execute through the services.
+  - **Reject** - mark `rejected` with optional notes. Pending actions stay un-executed (the action-cancel approach is a Phase 5 decision: either marked `cancelled` if we add that enum value, or deleted).
+  - **Add notes + Mark resolved** - for "I called the guest, I handled this off-platform."
 
 **Test it covers:** test 5 - "Missing required field goes to review."
 
@@ -124,12 +124,12 @@ These are the scenarios the system must handle. Every line of business logic exi
 
 1. Event arrives → FinanceOps adapter generates the two actions normally.
 2. Engine calls `mockFinanceService.sendPaymentReminder()` → service throws (the `simulate_failure` flag triggers a deterministic error).
-3. Engine catches → marks event `failed` (NOT `completed`).
+3. Engine catches → marks the failed action `failed` and routes the event to `review_required` (spec §6: service failures enter the review queue; spec §4: `review_required` is the in-review state, `failed` is terminal after operator reject).
 4. Creates a review queue item with reason capturing the service name + error message.
 5. Audit log records the failure with the full error.
-6. Failed counter ticks up on the dashboard.
+6. Needs-review counter ticks up on the dashboard.
 
-**Operator action:** opens the review item, sees the failure reason, decides whether to retry (resubmit the event without the flag — they'd need to manually re-submit through the simulator), mark resolved with notes, or escalate.
+**Operator action:** opens the review item, sees the failure reason, decides whether to approve (retry the failed actions through the service - if it was transient, they go green; if `simulate_failure` is still in the payload, they fail again and event becomes terminal `failed`), reject with notes (terminal `failed`, cancels pending actions), mark resolved with notes (handled off-platform), or escalate.
 
 **Test it covers:** test 6 - "Simulated external failure is handled correctly."
 
@@ -180,7 +180,7 @@ This is the entire UX. Each of the five pages serves one verb:
 
 | Use case / behavior | Code location |
 | --- | --- |
-| Route by `(source, event_type)` | `src/lib/workflow/engine.ts` — adapter map lookup |
+| Route by `(source, event_type)` | `src/lib/workflow/engine.ts` - adapter map lookup |
 | FinanceOps logic + priority | `src/lib/workflow/adapters/financeops.ts` |
 | CampaignOps per-channel + QA bonus | `src/lib/workflow/adapters/campaignops.ts` |
 | GuestOps validation + actions | `src/lib/workflow/adapters/guestops.ts` |
@@ -198,7 +198,7 @@ This is the entire UX. Each of the five pages serves one verb:
 
 These are spec'd or implied by spec §13 + §14, captured here so we don't drift:
 
-- **Don't blindly automate ambiguous payloads.** UC5's payload could be guessed at — don't. Send it to review with a clear reason.
+- **Don't blindly automate ambiguous payloads.** UC5's payload could be guessed at - don't. Send it to review with a clear reason.
 - **Don't double-execute.** UC1 retried twice is still one reminder sent. Idempotency is non-negotiable.
 - **Don't silently swallow failures.** UC6 must be visible on the dashboard's Failed counter, on the inbox list, in the audit timeline, AND in the review queue.
 - **Don't add primary lime to status chips.** The primary lime CTA is the single per-screen action (Submit on simulator, Approve on review). Failure is `failed` status red (design.md §5), not lime.
@@ -207,4 +207,4 @@ These are spec'd or implied by spec §13 + §14, captured here so we don't drift
 
 ## When to update this document
 
-When the use cases change — a new stream lands, a new operator workflow emerges, a spec interpretation shifts. Not on every implementation detail. This is the product-level truth that survives code refactors.
+When the use cases change - a new stream lands, a new operator workflow emerges, a spec interpretation shifts. Not on every implementation detail. This is the product-level truth that survives code refactors.

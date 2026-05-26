@@ -9,7 +9,7 @@ vi.mock("@/lib/supabase/server", () => ({
 import { processEvent } from "@/lib/workflow/engine";
 import type { IncomingEvent } from "@/lib/workflow/types";
 
-// Appendix A "Missing Required Field" payload — invoice_id absent.
+// Appendix A "Missing Required Field" payload - invoice_id absent.
 const eventMissingInvoiceId: IncomingEvent = {
   source_event_id: "finance-002",
   source: "financeops",

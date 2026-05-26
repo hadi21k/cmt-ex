@@ -28,7 +28,7 @@ Lay the full foundation for the Operations Command Center exercise (this reposit
 
 <!-- Mid-execution clarifications that affect multiple future phases. Empty until needed. -->
 
-## Phase 1 — CLAUDE.md index + Next 16 docs grounding
+## Phase 1 - CLAUDE.md index + Next 16 docs grounding
 
 - Preconditions:
   - `CLAUDE.md` (at repo root) exists and contains `@AGENTS.md`
@@ -54,9 +54,9 @@ Lay the full foundation for the Operations Command Center exercise (this reposit
 - Outcome:
   - [2026-05-25T19:08] Phase 1 done. CLAUDE.md rewritten with: (a) "Source of truth" section hard-linking to requirements.md absolute path; (b) quick-reference tables for 5 pages, 4 stream mappings (including Unknown), 5 statuses, 4 persistence entities with key fields; (c) mock-services + simulate_failure rules; (d) 6 mandatory tests; (e) strong-submission signals; (f) Stack list; (g) Next 16 notes capturing async cookies/headers/params/searchParams, `next lint` removed, middleware→proxy, Turbopack default, revalidateTag cacheLife arg, refresh() from next/cache, React 19.2, parallel-routes default.js, private folders `_folder` convention, runtimeConfig removal, images.domains deprecation; (h) project conventions (npm only, paths for workflow/server-actions/supabase/migrations); (i) consult list pointing at mutating-data and version-16 docs.
   - Read source docs: `01-app/01-getting-started/07-mutating-data.md`, `01-app/01-getting-started/02-project-structure.md`, `01-app/02-guides/upgrading/version-16.md`.
-  - All 4 postcondition grep checks pass: `requirements.md` referenced (2 times — Source of truth + Files to consult), `@AGENTS.md` include preserved (1 time at bottom), all three streams present, all four entity rows present.
+  - All 4 postcondition grep checks pass: `requirements.md` referenced (2 times - Source of truth + Files to consult), `@AGENTS.md` include preserved (1 time at bottom), all three streams present, all four entity rows present.
 
-## Phase 2 — Install dependencies + Supabase agent skill
+## Phase 2 - Install dependencies + Supabase agent skill
 
 - Preconditions:
   - Phase 1 postconditions hold
@@ -72,7 +72,7 @@ Lay the full foundation for the Operations Command Center exercise (this reposit
 - Steps:
   1. `npm i @supabase/supabase-js @supabase/ssr zod`
   2. `npm i -D vitest @vitejs/plugin-react jsdom @testing-library/react @testing-library/jest-dom supabase`
-  3. From the repo root, run `npx skills add supabase/agent-skills` — install at project scope only (not global). If the command prompts for global vs project, choose project.
+  3. From the repo root, run `npx skills add supabase/agent-skills` - install at project scope only (not global). If the command prompts for global vs project, choose project.
   4. Verify `package.json` shows all expected packages
   5. Skim `npm install` output for deprecation warnings on the newly-added set; if any, swap to a non-deprecated alternative
 - Verification:
@@ -84,11 +84,11 @@ Lay the full foundation for the Operations Command Center exercise (this reposit
   - [2026-05-25T19:18] Q: `current_phase` counter was off-by-one after Phase 1 (showed 1 instead of 2). → A: Convention adopted: `current_phase` = "phase currently in progress or about to execute next." After completing Phase N, set to N+1. Corrected on Phase 2 finalization (bumped 1 → 3).
 - Outcome:
   - [2026-05-25T19:18] Phase 2 done. Runtime deps installed: `@supabase/supabase-js ^2.106.2`, `@supabase/ssr ^0.10.3`, `zod ^4.4.3`. DevDeps installed: `vitest ^4.1.7`, `@vitejs/plugin-react ^6.0.2`, `jsdom ^29.1.1`, `@testing-library/react ^16.3.2`, `@testing-library/jest-dom ^6.9.1`, `supabase ^2.101.0` (CLI).
-  - Supabase agent skills installed at project scope via `npx skills add supabase/agent-skills -y --all`: two skills landed — `supabase` (main) and `supabase-postgres-best-practices` — at `.agents/skills/`, symlinked into `.claude/skills/`. Universal install also reached Amp, Antigravity, Cline, Codex, Cursor and 10 more agents in the same install.
-  - No `npm WARN deprecated` lines emitted for any of the target packages. EBADENGINE noise is environmental (Node 21.4.0 between LTS) and does NOT affect any of the newly-added direct deps; it appears on transitive packages that pin Node 18/20/22+. `npm audit` reports 2 moderate-severity vulnerabilities post-install — captured here for the final code-reviewer phase to evaluate; nothing to address mid-scaffold.
+  - Supabase agent skills installed at project scope via `npx skills add supabase/agent-skills -y --all`: two skills landed - `supabase` (main) and `supabase-postgres-best-practices` - at `.agents/skills/`, symlinked into `.claude/skills/`. Universal install also reached Amp, Antigravity, Cline, Codex, Cursor and 10 more agents in the same install.
+  - No `npm WARN deprecated` lines emitted for any of the target packages. EBADENGINE noise is environmental (Node 21.4.0 between LTS) and does NOT affect any of the newly-added direct deps; it appears on transitive packages that pin Node 18/20/22+. `npm audit` reports 2 moderate-severity vulnerabilities post-install - captured here for the final code-reviewer phase to evaluate; nothing to address mid-scaffold.
   - All postcondition checks pass: package.json contains all required keys; `.agents/skills/supabase/` and `.agents/skills/supabase-postgres-best-practices/` exist; `npx supabase --version` returns `2.101.0`.
 
-## Phase 3 — Supabase client wiring + env + schema migration
+## Phase 3 - Supabase client wiring + env + schema migration
 
 - Post-phase agents: database-reviewer
 - Preconditions:
@@ -109,16 +109,16 @@ Lay the full foundation for the Operations Command Center exercise (this reposit
 - Steps:
   1. `mkdir -p src/lib/supabase supabase/migrations`
   2. Read latest `@supabase/ssr` docs (via `npx supabase --help` and the agent skill's docs) to confirm Next 16 cookie API shape
-  3. Write `src/lib/supabase/client.ts` — browser client
-  4. Write `src/lib/supabase/server.ts` — server client with cookies adapter compatible with Next 16's async `cookies()` API
+  3. Write `src/lib/supabase/client.ts` - browser client
+  4. Write `src/lib/supabase/server.ts` - server client with cookies adapter compatible with Next 16's async `cookies()` API
   5. Create `.env.local` with the user-provided URL and publishable key
   6. Verify `.gitignore` covers `.env.local` (Next scaffold should already; add if missing)
   7. Create `.env.example` with placeholder values
   8. `npx supabase init` (if `supabase/` not present already; idempotent)
-  9. `npx supabase link --project-ref fiigztjfkvlgetyiiauj` — interactive: user provides access token + DB password
-  10. `npx supabase migration new init` — scaffolds timestamped migration file
+  9. `npx supabase link --project-ref fiigztjfkvlgetyiiauj` - interactive: user provides access token + DB password
+  10. `npx supabase migration new init` - scaffolds timestamped migration file
   11. Write SQL for the four tables matching spec §7, with UNIQUE(source_event_id), CHECK constraint on status, FKs, `created_at`/`updated_at` with `now()` defaults, JSONB for `payload` and `metadata`
-  12. `npx supabase db push` — apply to hosted project
+  12. `npx supabase db push` - apply to hosted project
   13. Verify tables exist via `npx supabase db diff` (should be empty after push) or by querying via the Supabase MCP if available
   14. Dispatch `database-reviewer` agent on the migration file with the spec §7 entity table as context
   15. Address any CRITICAL/HIGH findings; capture LOW/MEDIUM in this phase's Clarifications
@@ -138,29 +138,29 @@ Lay the full foundation for the Operations Command Center exercise (this reposit
   - [2026-05-25T19:25] Q: Local file timestamp drifted from the MCP-applied version (`20260525161014` vs `20260525161555`). → A: Renamed local file to match remote so `supabase db push` is a no-op for any future clone. Migration history table on the remote shows version `20260525161555`.
 - Outcome:
   - [2026-05-25T19:25] Phase 3 done. Supabase clients wired: `src/lib/supabase/client.ts` (browser via `createBrowserClient`), `src/lib/supabase/server.ts` (SSR via `createServerClient` with the `cookies: { getAll, setAll }` adapter compatible with Next 16's async `cookies()` API). `.env.local` populated with the hosted project URL + publishable key, gitignored via existing `.env*` pattern. `.env.example` committed with placeholder values and a comment explaining each var.
-  - `supabase init` scaffolded `supabase/config.toml`. Migration created via `supabase migration new init`, then renamed to `supabase/migrations/20260525161555_init.sql` to match the remote version after apply. SQL covers all four entities per spec §7: `events` (with `UNIQUE(source_event_id)` for idempotency, CHECK on status + source enums, `updated_at` trigger), `actions` (FK + CHECK on status), `review_queue_items` (FK + CHECK on status, `resolution_notes` + `resolved_at` for the review flow), `audit_logs` (FK, JSONB metadata). FK columns explicitly indexed (postgres does not auto-index FKs). RLS enabled on all four tables with permissive `to anon, authenticated using (true) with check (true)` policies — deliberate per spec §13 (auth out of scope); rationale documented inline in the migration.
+  - `supabase init` scaffolded `supabase/config.toml`. Migration created via `supabase migration new init`, then renamed to `supabase/migrations/20260525161555_init.sql` to match the remote version after apply. SQL covers all four entities per spec §7: `events` (with `UNIQUE(source_event_id)` for idempotency, CHECK on status + source enums, `updated_at` trigger), `actions` (FK + CHECK on status), `review_queue_items` (FK + CHECK on status, `resolution_notes` + `resolved_at` for the review flow), `audit_logs` (FK, JSONB metadata). FK columns explicitly indexed (postgres does not auto-index FKs). RLS enabled on all four tables with permissive `to anon, authenticated using (true) with check (true)` policies - deliberate per spec §13 (auth out of scope); rationale documented inline in the migration.
   - Applied to hosted Supabase project `fiigztjfkvlgetyiiauj` via `mcp__supabase__apply_migration`. Verified via `mcp__supabase__list_tables`: all 4 tables exist with `rls_enabled: true`, correct columns, correct CHECK constraints, and all three FKs to `events.id` registered. `mcp__supabase__list_migrations` confirms migration `20260525161555_init` recorded.
-  - Supabase advisors run. SECURITY: 4× WARN "RLS Policy Always True" (one per table) — accepted as deliberate per the auth-out-of-scope constraint, rationale documented in migration comments. PERFORMANCE: 9× INFO "Unused Index" — empty tables with no query history; will self-resolve once data lands.
-  - `database-reviewer` agent report (verbatim summary): Engine PostgreSQL; 0 CRITICAL, 0 HIGH, 2 MEDIUM, 3 LOW. Verdict: **OK-TO-COMMIT-WITH-FOLLOWUPS** — "Schema is spec-complete. All four tables present with correct fields, types, and FK structure. Clear to proceed." MEDIUM #1: `events_created_at_idx` / `audit_logs_created_at_idx` `DESC` annotation is cargo-cult on single-column btree (planner traverses bidirectionally) — cosmetic, no action. MEDIUM #2: Optional composite `(status, created_at DESC)` on `review_queue_items` would eliminate sort step at scale — deferred (one-day exercise won't hit that scale). LOW: `actions_status_idx` likely unused (actions always queried via `event_id`); `set_updated_at` only on `events` (correct, others have no `updated_at`); `audit_logs.metadata` NOT NULL is properly enforced via the default. RLS posture: "Acceptable as-is. The advisor warning is a false positive for a no-auth exercise. RLS enabled + permissive policy is strictly better than RLS disabled because future auth addition only requires adding a policy."
+  - Supabase advisors run. SECURITY: 4× WARN "RLS Policy Always True" (one per table) - accepted as deliberate per the auth-out-of-scope constraint, rationale documented in migration comments. PERFORMANCE: 9× INFO "Unused Index" - empty tables with no query history; will self-resolve once data lands.
+  - `database-reviewer` agent report (verbatim summary): Engine PostgreSQL; 0 CRITICAL, 0 HIGH, 2 MEDIUM, 3 LOW. Verdict: **OK-TO-COMMIT-WITH-FOLLOWUPS** - "Schema is spec-complete. All four tables present with correct fields, types, and FK structure. Clear to proceed." MEDIUM #1: `events_created_at_idx` / `audit_logs_created_at_idx` `DESC` annotation is cargo-cult on single-column btree (planner traverses bidirectionally) - cosmetic, no action. MEDIUM #2: Optional composite `(status, created_at DESC)` on `review_queue_items` would eliminate sort step at scale - deferred (one-day exercise won't hit that scale). LOW: `actions_status_idx` likely unused (actions always queried via `event_id`); `set_updated_at` only on `events` (correct, others have no `updated_at`); `audit_logs.metadata` NOT NULL is properly enforced via the default. RLS posture: "Acceptable as-is. The advisor warning is a false positive for a no-auth exercise. RLS enabled + permissive policy is strictly better than RLS disabled because future auth addition only requires adding a policy."
 
-## Phase 4 — shadcn init + dashboard-01 block + sidebar nav rewire
+## Phase 4 - shadcn init + dashboard-01 block + sidebar nav rewire
 
 - Preconditions:
   - Phase 1 postconditions hold (Next 16 docs grounded)
   - `shadcn` available in devDependencies (already from initial scaffold)
 - Postconditions:
   - `components.json` exists at project root with current shadcn 4.x configuration
-  - `src/components/ui/` populated with the primitives required by `dashboard-01` (button, card, sidebar, sheet, separator, badge, table, dropdown-menu, avatar, breadcrumb, tooltip, etc. — whatever the block pulls in)
+  - `src/components/ui/` populated with the primitives required by `dashboard-01` (button, card, sidebar, sheet, separator, badge, table, dropdown-menu, avatar, breadcrumb, tooltip, etc. - whatever the block pulls in)
   - `dashboard-01` block files exist under `src/components/` and `src/app/` per shadcn's install layout for v4
   - All mock/demo data in the block (chart data, sample rows, user names, fake stats) replaced with `[]` arrays or `null` and a `// TODO: wire to Supabase` comment so the next implement can plug in real queries
   - Sidebar nav rewired to the four top-level routes: `/` (Dashboard), `/inbox` (Event Inbox), `/simulator` (Event Simulator), `/review` (Human Review Queue). Event Detail is not a top-level nav item; it's reached from the Inbox.
-  - Sidebar nav labels and icons (using `lucide-react`) match the operations domain — e.g. Inbox icon, Play/Beaker icon for Simulator, Flag/Alert icon for Review
+  - Sidebar nav labels and icons (using `lucide-react`) match the operations domain - e.g. Inbox icon, Play/Beaker icon for Simulator, Flag/Alert icon for Review
   - Dashboard page (`src/app/page.tsx`) renders the block layout cleanly with no console errors and no demo content
 - Steps:
   1. Read latest shadcn v4 docs (via the shadcn MCP if available, else `npx shadcn@latest --help` and the shadcn website's v4 section) to confirm the Tailwind 4 + Next 16 setup steps
-  2. `npx shadcn@latest init` if `components.json` doesn't exist; accept defaults compatible with Tailwind 4 (no separate tailwind.config — Tailwind 4 uses CSS-only config)
-  3. `npx shadcn@latest add dashboard-01` — installs block + all transitive components
-  4. Inventory every file the block created — `git status` after the install
+  2. `npx shadcn@latest init` if `components.json` doesn't exist; accept defaults compatible with Tailwind 4 (no separate tailwind.config - Tailwind 4 uses CSS-only config)
+  3. `npx shadcn@latest add dashboard-01` - installs block + all transitive components
+  4. Inventory every file the block created - `git status` after the install
   5. Walk each file and identify mock data sources (constant arrays of users, charts data files, demo stats)
   6. Replace each mock data source with an empty fallback + `// TODO: wire to Supabase events query` (or equivalent comment naming the real source)
   7. Rewrite the sidebar nav array to the four routes with operations-themed labels and icons
@@ -172,30 +172,30 @@ Lay the full foundation for the Operations Command Center exercise (this reposit
   - `grep -E "(\"/inbox\"|\"/simulator\"|\"/review\")" src/components/` finds all three new nav links
   - `npm run build` succeeds
 - Clarifications:
-  - [2026-05-25T19:35] Q: User added `design.md` mid-flight (cmonkeytribe-derived design system: teal/orange brand, cream surface, Helvetica, specific status chip palette, near-flat shadows). Apply in Phase 4 or defer to next implement? → A: Apply CORE color tokens + font family in Phase 4 (`globals.css` overrides shadcn defaults to map onto the brand pair, swap Geist for Helvetica/Arial system stack). Defer status chip components, audit-timeline trunk, table specifications, and per-page typography hierarchy to next implement when actual pages get built — those need real markup, not just tokens. Documented in design.md §5 (status chips) as "applied per-component when actual pages are built."
+  - [2026-05-25T19:35] Q: User added `design.md` mid-flight (cmonkeytribe-derived design system: teal/orange brand, cream surface, Helvetica, specific status chip palette, near-flat shadows). Apply in Phase 4 or defer to next implement? → A: Apply CORE color tokens + font family in Phase 4 (`globals.css` overrides shadcn defaults to map onto the brand pair, swap Geist for Helvetica/Arial system stack). Defer status chip components, audit-timeline trunk, table specifications, and per-page typography hierarchy to next implement when actual pages get built - those need real markup, not just tokens. Documented in design.md §5 (status chips) as "applied per-component when actual pages are built."
   - [2026-05-25T19:35] Q: dashboard-01 block put dashboard at `/dashboard/page.tsx`; spec wants `/`. → A: Moved content to `/page.tsx`, deleted `/dashboard/` folder, hoisted the shell (`SidebarProvider` + `AppSidebar` + `SiteHeader` + `TooltipProvider`) into `src/app/layout.tsx` so all five required routes share it without duplication.
   - [2026-05-25T19:35] Q: data-table.tsx and data.json kept or dropped? → A: Dropped. The block's table was tightly coupled to the demo schema with heavy zod validation. `/inbox` (Phase 5 placeholder; built in next implement) will use a simpler table built from scratch against the real `events` shape. Less dead code in the scaffold.
 - Outcome:
   - [2026-05-25T19:35] Phase 4 done. `npx shadcn@latest init -d -y` (Next + Tailwind 4 detected, neutral base, CSS variables) created `components.json`, `src/components/ui/button.tsx`, `src/lib/utils.ts`. `npx shadcn@latest add @shadcn/dashboard-01 -y` landed 22 UI primitives (button, card, sidebar, sheet, table, dropdown-menu, tooltip, breadcrumb, badge, etc.) + 9 dashboard composites (app-sidebar, chart-area-interactive, data-table, nav-main/secondary/documents/user, section-cards, site-header) + `src/app/dashboard/page.tsx` + demo `data.json`.
   - Demo content stripped. `data-table.tsx`, `data.json`, and `nav-documents.tsx` deleted (block-specific, not on spec). `app-sidebar.tsx` rewired: brand mark "Operations CC", nav items `/` (Dashboard, LayoutDashboardIcon), `/inbox` (Event Inbox, InboxIcon), `/simulator` (Simulator, BeakerIcon), `/review` (Review Queue, FlagIcon); navClouds + documents removed; navSecondary trimmed to a single Help link; user placeholder "Operator". `section-cards.tsx` rewired to 4 zero-value metric cards (Total events / Completed / Needs review / Failed) with `// TODO: wire to Supabase events query` and a sketch of the real server-component shape. `chart-area-interactive.tsx` replaced with a "Recent activity" empty-state card (the 90-day mock chart was off-spec; recent-activity list is the actual §3 requirement). `site-header.tsx` title changed from "Documents" to "Dashboard".
   - Layout restructured: `src/app/layout.tsx` now hosts `TooltipProvider` + `SidebarProvider` + `AppSidebar` + `SidebarInset` + `SiteHeader` shell so every route inherits it. Geist font dropped per design.md (Helvetica/Arial system stack only). `src/app/page.tsx` rewritten to just compose `SectionCards` + `ChartAreaInteractive`. Old Next-scaffold boilerplate gone. `src/app/dashboard/` folder deleted.
-  - Design tokens applied to `globals.css`: `--background` cream `#FDFBF7`, `--foreground` ink `#2E2A39`, `--primary` brand-teal `#12536B`, `--accent` brand-orange `#ED5338`, `--card`/`--popover` white, `--border` `#BFBFBF`, `--ring` brand-teal (focus ring per design), sidebar tokens mapped to white surface with teal-on-cream-tint active state, radius scale set to design's 10/11/12/22 px. Dark mode block removed (design.md is single light theme). Body font + letter-spacing (0.6px) applied at the `html` selector. Status chip palette (received/processing/completed/review_required/failed) DEFERRED to next implement per design.md §5 — they're per-component, not base tokens.
+  - Design tokens applied to `globals.css`: `--background` cream `#FDFBF7`, `--foreground` ink `#2E2A39`, `--primary` brand-teal `#12536B`, `--accent` brand-orange `#ED5338`, `--card`/`--popover` white, `--border` `#BFBFBF`, `--ring` brand-teal (focus ring per design), sidebar tokens mapped to white surface with teal-on-cream-tint active state, radius scale set to design's 10/11/12/22 px. Dark mode block removed (design.md is single light theme). Body font + letter-spacing (0.6px) applied at the `html` selector. Status chip palette (received/processing/completed/review_required/failed) DEFERRED to next implement per design.md §5 - they're per-component, not base tokens.
   - Verification: `npm run build` clean (compiled in 7.4s, TypeScript checked, one route `/` prerendered). `components.json` exists. `ls src/components/ui/*.tsx` returns 22. `grep` confirms all four nav URLs (`/`, `/inbox`, `/simulator`, `/review`) wired and zero matches for demo markers (`Acme Inc`, `Lorem`, `m@example`, `+12.5%`-style fake trend percentages). Build output shows zero `npm WARN deprecated` lines added by this phase.
 
-## Phase 5 — Route scaffolds + workflow architecture skeleton
+## Phase 5 - Route scaffolds + workflow architecture skeleton
 
 - Preconditions:
   - Phase 4 postconditions hold (dashboard-01 in place, nav rewired)
 - Postconditions:
-  - Placeholder route files exist and render under the dashboard layout: `src/app/inbox/page.tsx`, `src/app/events/[id]/page.tsx`, `src/app/simulator/page.tsx`, `src/app/review/page.tsx` — each renders a centered "Coming in next implement" message with the page title and breadcrumb
+  - Placeholder route files exist and render under the dashboard layout: `src/app/inbox/page.tsx`, `src/app/events/[id]/page.tsx`, `src/app/simulator/page.tsx`, `src/app/review/page.tsx` - each renders a centered "Coming in next implement" message with the page title and breadcrumb
   - `src/lib/workflow/` exists with: `engine.ts` (stub exporting the engine signature), `types.ts` (TypeScript types for `Event`, `Action`, `ReviewQueueItem`, `AuditLog`, `EventStatus`, `EventSource`), `adapters/README.md` (explains the FinanceOps/CampaignOps/GuestOps adapter contract and that adding a fourth stream means dropping a new file in this folder), `services/README.md` (explains where `mockFinanceService`, `mockCampaignService`, `mockGuestService` live and the `simulate_failure` contract)
   - `src/app/_actions/README.md` exists explaining the server-actions convention for this project (one file per top-level operation: `submitEvent.ts`, `resolveReviewItem.ts`, etc.)
   - All types in `src/lib/workflow/types.ts` are derived from spec §7 entities and §4 statuses, with explicit JSDoc comments linking back to `requirements.md` sections
-  - No business logic yet — just type definitions, signatures, README stubs, and "Coming next" placeholders
+  - No business logic yet - just type definitions, signatures, README stubs, and "Coming next" placeholders
 - Steps:
   1. Create the four placeholder route files. Each is a small Server Component that imports the dashboard layout and renders `<div>Coming in next implement: <title></div>` with a useful breadcrumb
-  2. Create `src/lib/workflow/types.ts` with TypeScript types for the four entities + the five-value status union + the source union (`financeops | campaignops | guestops | unknown`) — straight from spec
-  3. Create `src/lib/workflow/engine.ts` with stub exports: `processEvent(event: IncomingEvent): Promise<ProcessResult>` and `ProcessResult` type; body throws `Error('not yet implemented — see next /implement plan')`
+  2. Create `src/lib/workflow/types.ts` with TypeScript types for the four entities + the five-value status union + the source union (`financeops | campaignops | guestops | unknown`) - straight from spec
+  3. Create `src/lib/workflow/engine.ts` with stub exports: `processEvent(event: IncomingEvent): Promise<ProcessResult>` and `ProcessResult` type; body throws `Error('not yet implemented - see next /implement plan')`
   4. Create `src/lib/workflow/adapters/README.md` documenting: adapter interface, where each stream's adapter lives, how to add a fourth stream (the strong-submission signal)
   5. Create `src/lib/workflow/services/README.md` documenting mock services + `simulate_failure` flag contract
   6. Create `src/app/_actions/README.md` documenting server-actions location and naming
@@ -212,23 +212,23 @@ Lay the full foundation for the Operations Command Center exercise (this reposit
   - [2026-05-25T19:50] Q: Plan said "render with a useful breadcrumb" on placeholder routes; `site-header.tsx` currently shows a hardcoded "Dashboard" title. Build dynamic breadcrumb now or defer? → A: Defer to next implement. Making the breadcrumb route-aware needs `usePathname` in a client component + a route → label map, which is a feature, not a placeholder. Each placeholder page renders its own `<h1>` title + a clear "Coming in next implement" empty-state card. Sufficient for navigability test ("can I click through all 5 routes from the sidebar without errors").
 - Outcome:
   - [2026-05-25T19:50] Phase 5 done. Four placeholder route files created under the `SidebarInset` shell from `layout.tsx`: `src/app/inbox/page.tsx`, `src/app/events/[id]/page.tsx` (Server Component using Next 16 async `params` correctly: `const { id } = await params`), `src/app/simulator/page.tsx`, `src/app/review/page.tsx`. Each renders a page-title `<h1>`, a one-line description of what the page will do per spec, and an empty-state card with the specific spec section that scopes it (§3 / §6 / §9).
-  - Workflow architecture skeleton created under `src/lib/workflow/`: `types.ts` (TypeScript types for `EventStatus`, `EventSource`, `ActionStatus`, `ReviewStatus`, `IncomingEvent`, `Event`, `Action`, `ReviewQueueItem`, `AuditLog`, `ProcessResult` — all derived from spec §4 and §7, JSDoc references pointing back to those sections); `engine.ts` (stub `processEvent` throws "not yet implemented" with the 6-step contract documented in the function JSDoc — validate, route, run adapter, execute services, persist atomically, honour idempotency); `adapters/README.md` (adapter contract, planned files table for the three streams, and the "adding a fourth stream" recipe that the rubric will probe); `services/README.md` (mock services per spec §8, `simulate_failure` contract documented verbatim, anti-patterns including random failures and silently-swallowed flags).
+  - Workflow architecture skeleton created under `src/lib/workflow/`: `types.ts` (TypeScript types for `EventStatus`, `EventSource`, `ActionStatus`, `ReviewStatus`, `IncomingEvent`, `Event`, `Action`, `ReviewQueueItem`, `AuditLog`, `ProcessResult` - all derived from spec §4 and §7, JSDoc references pointing back to those sections); `engine.ts` (stub `processEvent` throws "not yet implemented" with the 6-step contract documented in the function JSDoc - validate, route, run adapter, execute services, persist atomically, honour idempotency); `adapters/README.md` (adapter contract, planned files table for the three streams, and the "adding a fourth stream" recipe that the rubric will probe); `services/README.md` (mock services per spec §8, `simulate_failure` contract documented verbatim, anti-patterns including random failures and silently-swallowed flags).
   - Server-actions skeleton: `src/app/_actions/README.md` documenting the convention (Next 16 private folder so `_actions` is not a route segment, one file per top-level operation, planned files `submitEvent.ts` + `resolveReviewItem.ts`, cache-tag conventions using `updateTag` for read-your-writes + `revalidateTag('tag', 'max')` with the required Next 16 cacheLife profile, zod validation at the boundary, anti-patterns including the load-bearing underscore).
-  - Verification: `npx tsc --noEmit` clean (no output, exit 0). `npm run build` clean: all 5 ops routes registered (`/` static, `/inbox` static, `/events/[id]` dynamic, `/simulator` static, `/review` static). All `test -f` checks pass for the 4 route files + 2 lib files + 3 README files. All 5 statuses (`received | processing | completed | review_required | failed`) appear as literals in `types.ts`; all 4 sources (`financeops | campaignops | guestops | unknown`) appear in the `EventSource` union. No business logic landed — pure type definitions, signatures, and READMEs as the plan required.
+  - Verification: `npx tsc --noEmit` clean (no output, exit 0). `npm run build` clean: all 5 ops routes registered (`/` static, `/inbox` static, `/events/[id]` dynamic, `/simulator` static, `/review` static). All `test -f` checks pass for the 4 route files + 2 lib files + 3 README files. All 5 statuses (`received | processing | completed | review_required | failed`) appear as literals in `types.ts`; all 4 sources (`financeops | campaignops | guestops | unknown`) appear in the `EventSource` union. No business logic landed - pure type definitions, signatures, and READMEs as the plan required.
 
-## Phase 6 — Vitest config + smoke test
+## Phase 6 - Vitest config + smoke test
 
 - Preconditions:
   - Phase 2 postconditions hold (vitest installed)
 - Postconditions:
   - `vitest.config.ts` exists at project root with React + jsdom + path alias matching `tsconfig.json`
-  - `tests/smoke.test.ts` (or `src/__tests__/smoke.test.ts` — pick the cleaner convention) exists with one trivial assertion that imports from `src/lib/workflow/types.ts` to verify the path alias works
+  - `tests/smoke.test.ts` (or `src/__tests__/smoke.test.ts` - pick the cleaner convention) exists with one trivial assertion that imports from `src/lib/workflow/types.ts` to verify the path alias works
   - `"test": "vitest run"` and `"test:watch": "vitest"` scripts in `package.json`
   - `npm test` runs and passes with 1 test
 - Steps:
   1. Read vitest's current Next 16 / React 19 / Tailwind 4 setup recommendation
   2. Write `vitest.config.ts` with `@vitejs/plugin-react`, `environment: 'jsdom'`, and the `@/*` path alias from `tsconfig.json`
-  3. Write `tests/smoke.test.ts` — one assertion using an import from `src/lib/workflow/types.ts` to validate alias + TS compilation
+  3. Write `tests/smoke.test.ts` - one assertion using an import from `src/lib/workflow/types.ts` to validate alias + TS compilation
   4. Add `test` and `test:watch` scripts to `package.json`
   5. `npm test` and verify pass
 - Verification:
@@ -244,7 +244,7 @@ Lay the full foundation for the Operations Command Center exercise (this reposit
   - `package.json` gained `"test": "vitest run"` (CI-style one-shot) and `"test:watch": "vitest"` (interactive). Also added `"engines": { "node": ">=22.12.0" }` per the cross-phase clarification.
   - `npm test` passes: 1 file, 1 test, 1.61s (RUN v4.1.7). `npm run build` still clean under Node 24.14.0 with all 5 ops routes registered.
 
-## Phase 7 — README + final verification
+## Phase 7 - README + final verification
 
 - Post-phase agents: code-reviewer
 - Preconditions:
@@ -271,7 +271,7 @@ Lay the full foundation for the Operations Command Center exercise (this reposit
   - `npm test` exits 0
   - `code-reviewer` report captured in Outcome
 - Clarifications:
-  - [2026-05-25T20:00] Q: `code-reviewer` flagged 1 HIGH + 5 MEDIUM findings. Address all or just HIGH? → A: Addressed HIGH plus all MEDIUMs (under 10 minutes' work each, and a take-home submission benefits from a clean diff). HIGH: nav-main sidebar items had no `render` prop so were `<button>` not `<a>` — now use `<Link>` from next/link for prefetching. MEDIUMs: stripped Quick Create + MailIcon demo widget from nav-main.tsx; stripped Account/Billing/Notifications/Log out dropdown from nav-user.tsx (auth out of scope per spec §13); removed hardcoded "Dashboard" h1 from site-header.tsx (each page owns its own h1; dynamic breadcrumb deferred); replaced dangling `--font-geist-mono` reference in globals.css with explicit system mono stack; bumped `@types/node` from ^20 to ^22 to match `engines.node`; uninstalled unused `@dnd-kit/*` + `@tanstack/react-table` (block dependencies whose consumers were already deleted). Kept `recharts` and `src/components/ui/chart.tsx` per reviewer's hedge — one `npx shadcn add chart` away from re-adding if removed. Avatar fallback now derives initials from `user.name` instead of hardcoded "CN".
+  - [2026-05-25T20:00] Q: `code-reviewer` flagged 1 HIGH + 5 MEDIUM findings. Address all or just HIGH? → A: Addressed HIGH plus all MEDIUMs (under 10 minutes' work each, and a take-home submission benefits from a clean diff). HIGH: nav-main sidebar items had no `render` prop so were `<button>` not `<a>` - now use `<Link>` from next/link for prefetching. MEDIUMs: stripped Quick Create + MailIcon demo widget from nav-main.tsx; stripped Account/Billing/Notifications/Log out dropdown from nav-user.tsx (auth out of scope per spec §13); removed hardcoded "Dashboard" h1 from site-header.tsx (each page owns its own h1; dynamic breadcrumb deferred); replaced dangling `--font-geist-mono` reference in globals.css with explicit system mono stack; bumped `@types/node` from ^20 to ^22 to match `engines.node`; uninstalled unused `@dnd-kit/*` + `@tanstack/react-table` (block dependencies whose consumers were already deleted). Kept `recharts` and `src/components/ui/chart.tsx` per reviewer's hedge - one `npx shadcn add chart` away from re-adding if removed. Avatar fallback now derives initials from `user.name` instead of hardcoded "CN".
 - Outcome:
   - [2026-05-25T20:00] Phase 7 done. **Plan complete.** `README.md` rewritten with Source of truth (links to docs/project/requirements.md), Stack (Next 16 / React 19 / TS 5 / Tailwind 4 / shadcn v4 / Supabase / zod / vitest, Node `>=22.12.0`), How to run (6 numbered steps: `nvm use`, `npm install`, `cp .env.example .env.local`, supabase login + link + db push, `npm run dev`, `npm test`), Project structure (annotated tree showing the workflow engine layout), What's foundation vs. what's next (explicit list of what this scaffold ships and what next implement will add), Conventions (npm only, server-actions location with the load-bearing underscore, migration apply via `supabase db push`), and Design pointer to design.md. `.nvmrc` committed at `24.14.0`.
   - `code-reviewer` agent report (verbatim summary): 0 CRITICAL, 1 HIGH, 5 MEDIUM, 5 LOW. Verdict initially **FIX-BEFORE-COMMIT**. HIGH (nav-main items not navigating) and all 5 MEDIUMs addressed in-phase. LOWs accepted as-is: `data.user.avatar = ""` + `email = "operator@local"` are scaffold placeholders polished in next implement; `@custom-variant dark` declaration is harmless noise; TODO comments without issue links are standard for solo take-home; site-header.tsx living next to client components is fine convention-wise (any future dynamic breadcrumb will become a Client Component there).

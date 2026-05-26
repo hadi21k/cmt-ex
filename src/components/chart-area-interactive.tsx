@@ -13,7 +13,7 @@ import type { Event } from "@/lib/workflow/types";
 // Recent activity list per spec §3 ("recent activity"). Ten most recent
 // events from any stream, newest-first (created_at desc), each row links
 // to the event detail page. Empty state teaches the operator how to
-// populate the dashboard (use the simulator) — per impeccable product
+// populate the dashboard (use the simulator) - per impeccable product
 // reference: "Empty states that teach the interface, not 'nothing here'."
 
 const SOURCE_LABEL: Record<string, string> = {

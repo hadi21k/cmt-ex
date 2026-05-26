@@ -13,7 +13,7 @@ import type { ProcessResult } from "@/lib/workflow/types";
 // Spec §4 step 2 enumerates the four valid sources. Anything else is the
 // upstream integration shipping garbage; reject at the boundary with a
 // clear validation error rather than DB CHECK violation. `unknown` itself
-// is a valid value — the engine routes it to review.
+// is a valid value - the engine routes it to review.
 const incomingEventSchema = z.object({
   source_event_id: z.string().min(1).max(200),
   source: z.enum(["financeops", "campaignops", "guestops", "unknown"]),

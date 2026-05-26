@@ -21,10 +21,10 @@ Each file:
 
 Tag everything with the entity it affects so we can revalidate precisely:
 
-- `events` — the inbox list
-- `event-${id}` — the event detail page for a specific event
-- `review-queue` — the open review queue list
-- `dashboard` — the four count cards on `/`
+- `events` - the inbox list
+- `event-${id}` - the event detail page for a specific event
+- `review-queue` - the open review queue list
+- `dashboard` - the four count cards on `/`
 
 `updateTag` is preferred inside Server Actions (read-your-writes); `revalidateTag('events', 'max')` (note the cacheLife profile, required in Next 16) is for "this will refresh eventually" cases.
 
@@ -32,5 +32,5 @@ Tag everything with the entity it affects so we can revalidate precisely:
 
 - **Calling Server Actions from Server Components for read paths.** Use direct Supabase queries in the component; reserve actions for mutations.
 - **Returning DB rows without typing them.** Use the entity types in `@/lib/workflow/types`. If a server action returns `any`, it's wrong.
-- **Skipping zod validation.** Server Actions are reachable via direct POST — same threat model as a public API endpoint, even when the UI never sends a malformed payload.
+- **Skipping zod validation.** Server Actions are reachable via direct POST - same threat model as a public API endpoint, even when the UI never sends a malformed payload.
 - **Folder named `actions` (no underscore prefix).** That becomes a route segment and conflicts with Next routing. The `_` is load-bearing.

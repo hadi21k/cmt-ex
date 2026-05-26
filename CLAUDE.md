@@ -6,11 +6,11 @@ The master spec for this project lives in the repo at:
 
 **`docs/project/requirements.md`**
 
-**Read it before writing any code.** It is a verbatim transcription of the candidate-facing PDF and the contract you are being evaluated against. Do not skip a requirement — the evaluator may test with additional payloads.
+**Read it before writing any code.** It is a verbatim transcription of the candidate-facing PDF and the contract you are being evaluated against. Do not skip a requirement - the evaluator may test with additional payloads.
 
 Project metadata, goals, constraints, and open questions live in `docs/project/CONTEXT.md`. The build record lives in `docs/implement/`: `workflows-and-pages.md` (feature work) and `setup-and-scaffold.md` (foundation work).
 
-The product-level user stories — the six end-to-end use cases the system must serve, the operator's daily loop, and the code-mapping table — live at `docs/project/user-stories.md`. **Read this before writing any feature code.** It is the why behind every adapter, server action, and UI surface.
+The product-level user stories - the six end-to-end use cases the system must serve, the operator's daily loop, and the code-mapping table - live at `docs/project/user-stories.md`. **Read this before writing any feature code.** It is the why behind every adapter, server action, and UI surface.
 
 The design system for this dashboard (tokens, components, do's and don'ts, extracted from cmonkeytribe.com and retargeted for product register) lives at `docs/project/design.md`. Read it before building any UI.
 
@@ -90,30 +90,30 @@ Next.js 16 has multiple breaking changes from training data. Verify against `nod
   const { id } = await props.params         // not: props.params.id
   ```
 - **`next lint` is removed.** Use the ESLint CLI directly (`npx eslint .`). `next build` no longer runs lint.
-- **`middleware.ts` → `proxy.ts`.** The new file convention is `proxy.ts` with a `proxy` export. `edge` runtime is NOT supported in `proxy` (it runs on `nodejs`). We are not adding a proxy/middleware in this project, but if we ever do — use the new name.
+- **`middleware.ts` → `proxy.ts`.** The new file convention is `proxy.ts` with a `proxy` export. `edge` runtime is NOT supported in `proxy` (it runs on `nodejs`). We are not adding a proxy/middleware in this project, but if we ever do - use the new name.
 - **Turbopack is default.** `next dev` and `next build` use Turbopack with no flag needed. No webpack config in this repo.
 - **`revalidateTag` requires a `cacheLife` profile** as a second arg: `revalidateTag('events', 'max')`. For read-your-writes semantics inside a Server Action, use `updateTag('events')` instead.
 - **`refresh()` from `next/cache`** refreshes the client router from a Server Action without touching tagged data.
-- **`cacheLife` and `cacheTag`** are stable — drop the `unstable_` prefix.
+- **`cacheLife` and `cacheTag`** are stable - drop the `unstable_` prefix.
 - **React 19.2.** View Transitions, `useEffectEvent`, and `<Activity>` are available. Use cautiously for the audit-timeline UI if it helps.
 - **Parallel routes** require explicit `default.js` files (we are not using parallel routes for this exercise).
 - **Server Functions / Server Actions.** Async functions marked with `'use server'` (top of file or top of function). Convention for this project: one server action per file under `src/app/_actions/`.
-- **Private folders.** `_folder` prefix excludes from routing — use `src/app/_actions/`, NOT `src/app/actions/`.
+- **Private folders.** `_folder` prefix excludes from routing - use `src/app/_actions/`, NOT `src/app/actions/`.
 - **`serverRuntimeConfig` / `publicRuntimeConfig` removed.** Use env vars. Client values must be prefixed `NEXT_PUBLIC_`.
 - **`images.domains` deprecated.** Use `images.remotePatterns`.
 
 ## Project conventions
 
 - **Package manager:** `npm`. Never `pnpm`, `yarn`, or `bun`.
-- **Workflow engine location:** `src/lib/workflow/` — `engine.ts`, `types.ts`, `adapters/`, `services/`. Adding a fourth stream = dropping a file in `adapters/`.
-- **Server actions location:** `src/app/_actions/` — one file per top-level operation.
+- **Workflow engine location:** `src/lib/workflow/` - `engine.ts`, `types.ts`, `adapters/`, `services/`. Adding a fourth stream = dropping a file in `adapters/`.
+- **Server actions location:** `src/app/_actions/` - one file per top-level operation.
 - **Supabase clients:** `src/lib/supabase/client.ts` (browser) and `src/lib/supabase/server.ts` (SSR via `@supabase/ssr`).
 - **Migrations:** `supabase/migrations/<timestamp>_<name>.sql`. Apply with `npx supabase db push` against the linked project.
 - **Tests:** only the 6 mandatory tests. Don't write more.
 
 ## Files to consult before non-trivial work
 
-- `requirements.md` (master spec — link above)
+- `requirements.md` (master spec - link above)
 - `design.md` (design system, link in Source of truth section)
 - `node_modules/next/dist/docs/01-app/01-getting-started/07-mutating-data.md` (Server Actions)
 - `node_modules/next/dist/docs/01-app/02-guides/upgrading/version-16.md` (every breaking change)

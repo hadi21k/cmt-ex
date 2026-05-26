@@ -227,6 +227,12 @@ export default async function EventDetailPage({
 }
 
 function payloadSummary(event: Event): string | null {
+  // Skip the summary on unknown-source events. Even if their event_type
+  // matches a canonical string (FinanceOps, CampaignOps, GuestOps), the
+  // routing was unknown so a summary line would imply a stream attribution
+  // the engine didn't actually assign.
+  if (event.source === "unknown") return null;
+
   const payload = event.payload as Record<string, unknown> | null;
   if (!payload) return null;
 

@@ -9,7 +9,7 @@ import { ReviewList, type ReviewListItem } from "./_review-list";
 // Queue-plus-detail split view. The list on the left stays sticky on
 // desktop so the operator never loses sight of the next item to decide
 // on. Selection state is local to the client; on a successful action,
-// pre-select the next item and refresh — the router re-fetches and
+// pre-select the next item and refresh - the router re-fetches and
 // the resolved item drops out of the list, but the next item is
 // already selected so the operator stays in flow.
 
