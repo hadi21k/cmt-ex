@@ -1,13 +1,13 @@
 "use client";
 
 import * as React from "react";
-import Image from "next/image";
 import {
   LayoutDashboardIcon,
   InboxIcon,
   BeakerIcon,
   FlagIcon,
   CircleHelpIcon,
+  WaypointsIcon,
 } from "lucide-react";
 
 import { NavMain } from "@/components/nav-main";
@@ -50,14 +50,7 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
               className="data-[slot=sidebar-menu-button]:p-1.5!"
               render={<a href="/" />}
             >
-              <Image
-                src="/cmt-logo.png"
-                alt="C. Monkey Tribe"
-                width={20}
-                height={20}
-                className="size-5!"
-                priority
-              />
+              <WaypointsIcon className="size-5!" aria-hidden />
               <span className="text-base font-semibold">
                 Operations CC
               </span>
