@@ -7,8 +7,11 @@ import { submitEvent, type SubmitEventResult } from "@/app/_actions/submitEvent"
 import { StatusChip } from "@/components/status-chip";
 
 // Appendix A sample payloads — exact strings from the candidate spec.
-// Picking a sample replaces the editor; the simulate_failure case is
-// just sample #6 with the flag already on, so no separate toggle UI.
+// Split into two labelled groups so an operator (or first-time reviewer)
+// learns the mental model: three streams work end to end, three edge
+// cases route to review or surface a failure. Picking a sample replaces
+// the editor; the simulate_failure case is just sample #6 with the flag
+// already on.
 
 interface Sample {
   id: string;
@@ -17,7 +20,7 @@ interface Sample {
   payload: Record<string, unknown>;
 }
 
-const SAMPLES: Sample[] = [
+const HAPPY_PATHS: Sample[] = [
   {
     id: "finance-valid",
     label: "FinanceOps · overdue invoice",
@@ -68,6 +71,9 @@ const SAMPLES: Sample[] = [
       },
     },
   },
+];
+
+const EDGE_CASES: Sample[] = [
   {
     id: "ambiguous",
     label: "Unknown · ambiguous text",
@@ -84,7 +90,7 @@ const SAMPLES: Sample[] = [
   {
     id: "missing-field",
     label: "FinanceOps · missing field",
-    description: "Same shape as #1 but invoice_id is missing → review",
+    description: "Same shape as the overdue invoice but invoice_id is missing → review",
     payload: {
       source_event_id: "finance-002",
       source: "financeops",
@@ -100,7 +106,7 @@ const SAMPLES: Sample[] = [
   {
     id: "simulate-failure",
     label: "CampaignOps · simulate failure",
-    description: "Same as #2 with simulate_failure: true → fails + review",
+    description: "Same as the client brief with simulate_failure: true → fails + review",
     payload: {
       source_event_id: "campaign-002",
       source: "campaignops",
@@ -116,11 +122,13 @@ const SAMPLES: Sample[] = [
   },
 ];
 
+const ALL_SAMPLES: Sample[] = [...HAPPY_PATHS, ...EDGE_CASES];
+
 export function Simulator() {
   const [json, setJson] = useState<string>(
-    JSON.stringify(SAMPLES[0].payload, null, 2),
+    JSON.stringify(ALL_SAMPLES[0].payload, null, 2),
   );
-  const [activeId, setActiveId] = useState<string>(SAMPLES[0].id);
+  const [activeId, setActiveId] = useState<string>(ALL_SAMPLES[0].id);
   const [parseError, setParseError] = useState<string | null>(null);
   const [submitting, setSubmitting] = useState(false);
   const [result, setResult] = useState<SubmitEventResult | null>(null);
@@ -160,58 +168,34 @@ export function Simulator() {
 
   return (
     <div className="flex flex-col gap-6">
-      <section className="flex flex-col gap-3">
-        <h2
-          className="text-[13px] uppercase tracking-[0.5px]"
-          style={{ color: "rgba(14, 15, 12, 0.55)" }}
-        >
-          Sample payloads
-        </h2>
-        <div className="grid grid-cols-1 gap-2 md:grid-cols-2 lg:grid-cols-3">
-          {SAMPLES.map((sample) => {
-            const active = sample.id === activeId;
-            return (
-              <button
-                key={sample.id}
-                type="button"
-                onClick={() => loadSample(sample)}
-                aria-pressed={active}
-                className="flex flex-col gap-1 rounded-xl border px-4 py-3 text-left transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#9fe870]/55 focus-visible:ring-offset-2 focus-visible:ring-offset-background"
-                style={
-                  active
-                    ? {
-                        backgroundColor: "rgba(14, 15, 12, 0.06)",
-                        borderColor: "#0e0f0c",
-                        color: "#0e0f0c",
-                      }
-                    : {
-                        backgroundColor: "white",
-                        borderColor: "rgba(14, 15, 12, 0.12)",
-                        color: "#0e0f0c",
-                      }
-                }
-              >
-                <span className="text-[15px] font-medium">{sample.label}</span>
-                <span
-                  className="text-[13px]"
-                  style={{
-                    color: active ? "#0e0f0c" : "rgba(14, 15, 12, 0.65)",
-                  }}
-                >
-                  {sample.description}
-                </span>
-              </button>
-            );
-          })}
-        </div>
+      <section className="flex flex-col gap-4">
+        <SampleGroup
+          label="Happy paths"
+          subtitle="Three streams that run end to end with no operator intervention."
+          samples={HAPPY_PATHS}
+          activeId={activeId}
+          onPick={loadSample}
+        />
+        <div
+          aria-hidden
+          className="h-px"
+          style={{ backgroundColor: "rgba(14, 15, 12, 0.1)" }}
+        />
+        <SampleGroup
+          label="Edge cases"
+          subtitle="Routed to the review queue or surfaced as a failure."
+          samples={EDGE_CASES}
+          activeId={activeId}
+          onPick={loadSample}
+        />
       </section>
 
       <section className="grid grid-cols-1 gap-6 lg:grid-cols-[1fr_1fr]">
         <div className="flex flex-col gap-3">
-          <div className="flex items-center justify-between">
+          <div className="flex items-center justify-between gap-2">
             <h2
-              className="text-[13px] uppercase tracking-[0.5px]"
-              style={{ color: "rgba(14, 15, 12, 0.55)" }}
+              className="text-[14px] font-semibold leading-5"
+              style={{ color: "#0e0f0c" }}
             >
               Payload
             </h2>
@@ -251,46 +235,39 @@ export function Simulator() {
             >
               {submitting ? "Submitting…" : "Submit"}
             </button>
-            <span className="text-[13px] text-muted-foreground">
-              Sends through the same engine the simulator and any future
-              webhook would use.
-            </span>
           </div>
         </div>
 
         <div className="flex flex-col gap-3">
           <h2
-            className="text-[13px] uppercase tracking-[0.5px]"
-            style={{ color: "rgba(14, 15, 12, 0.55)" }}
+            className="text-[14px] font-semibold leading-5"
+            style={{ color: "#0e0f0c" }}
           >
             Result
           </h2>
           {result === null ? (
             <div
-              className="flex min-h-[360px] flex-col items-start justify-center gap-1 rounded-xl border border-dashed p-6 text-[14px]"
+              className="flex min-h-[360px] flex-col items-start justify-center gap-1 rounded-xl border border-dashed p-6 text-[14px] leading-5"
               style={{
                 borderColor: "rgba(14, 15, 12, 0.18)",
                 color: "rgba(14, 15, 12, 0.6)",
               }}
             >
               <p>No submissions yet.</p>
-              <p>
-                Pick a sample, edit, and submit to see the engine's
-                ProcessResult.
-              </p>
+              <p>Pick a sample, edit, and submit to see what happens.</p>
             </div>
           ) : result.ok ? (
             <ResultPreview result={result.result} />
           ) : (
             <div
-              className="rounded-xl border p-4 text-[14px]"
+              className="rounded-xl border p-4 text-[14px] leading-5"
               style={{
-                backgroundColor: "rgba(208, 50, 56, 0.06)",
-                borderColor: "rgba(208, 50, 56, 0.35)",
+                backgroundColor: "rgba(208, 50, 56, 0.12)",
+                borderColor: "rgba(208, 50, 56, 0.40)",
                 color: "#a7000d",
               }}
             >
-              <p className="font-medium">Submission failed.</p>
+              <p className="font-semibold">Submission failed.</p>
               <p className="mt-1 whitespace-pre-line">{result.error}</p>
             </div>
           )}
@@ -300,30 +277,99 @@ export function Simulator() {
   );
 }
 
+function SampleGroup({
+  label,
+  subtitle,
+  samples,
+  activeId,
+  onPick,
+}: {
+  label: string;
+  subtitle: string;
+  samples: Sample[];
+  activeId: string;
+  onPick: (sample: Sample) => void;
+}) {
+  return (
+    <div className="flex flex-col gap-3">
+      <div className="flex flex-col gap-0.5">
+        <h2
+          className="text-[14px] font-semibold leading-5"
+          style={{ color: "#0e0f0c" }}
+        >
+          {label}
+        </h2>
+        <p
+          className="text-[13px] leading-5"
+          style={{ color: "rgba(14, 15, 12, 0.6)" }}
+        >
+          {subtitle}
+        </p>
+      </div>
+      <div className="grid grid-cols-1 gap-2 md:grid-cols-2 lg:grid-cols-3">
+        {samples.map((sample) => {
+          const active = sample.id === activeId;
+          return (
+            <button
+              key={sample.id}
+              type="button"
+              onClick={() => onPick(sample)}
+              aria-pressed={active}
+              className="flex flex-col gap-1 rounded-xl border px-4 py-3 text-left transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#9fe870]/55 focus-visible:ring-offset-2 focus-visible:ring-offset-background"
+              style={
+                active
+                  ? {
+                      backgroundColor: "#0e0f0c",
+                      borderColor: "#0e0f0c",
+                      color: "#ffffff",
+                    }
+                  : {
+                      backgroundColor: "#ffffff",
+                      borderColor: "rgba(14, 15, 12, 0.12)",
+                      color: "#0e0f0c",
+                    }
+              }
+            >
+              <span className="text-[15px] font-semibold leading-5">
+                {sample.label}
+              </span>
+              <span
+                className="text-[13px] leading-5"
+                style={{
+                  color: active ? "rgba(255, 255, 255, 0.75)" : "rgba(14, 15, 12, 0.65)",
+                }}
+              >
+                {sample.description}
+              </span>
+            </button>
+          );
+        })}
+      </div>
+    </div>
+  );
+}
+
 function ResultPreview({
   result,
 }: {
   result: Extract<SubmitEventResult, { ok: true }>["result"];
 }) {
-  const { event, actions, reviewItem, auditLogs, existed } = result;
+  const { event, reviewItem, existed } = result;
   return (
     <div className="flex flex-col gap-4">
       {existed ? (
         <div
-          className="rounded-xl border px-4 py-3 text-[14px]"
+          className="rounded-xl border px-4 py-3 text-[14px] leading-5"
           style={{
-            backgroundColor: "rgba(14, 15, 12, 0.08)",
-            borderColor: "rgba(14, 15, 12, 0.35)",
+            backgroundColor: "#e8ebe6",
+            borderColor: "rgba(14, 15, 12, 0.20)",
             color: "#0e0f0c",
           }}
         >
-          <p className="text-[12px] font-medium uppercase tracking-[0.5px]">
-            Idempotent re-submission
-          </p>
+          <p className="text-[14px] font-semibold leading-5">Duplicate event</p>
           <p className="mt-1">
             An event with this <span className="font-mono">source_event_id</span>{" "}
-            already exists. Returning the prior result without re-running the
-            workflow. Edit the id to create a new event.
+            already exists. Returning the prior result without re-running. Edit the id to create a new event.
           </p>
         </div>
       ) : null}
@@ -344,7 +390,7 @@ function ResultPreview({
           </span>
           <Link
             href={`/events/${event.id}`}
-            className="text-[15px] font-medium underline underline-offset-2"
+            className="text-[15px] font-semibold underline underline-offset-2"
             style={{ color: "#0e0f0c" }}
           >
             Open event detail →
@@ -355,61 +401,17 @@ function ResultPreview({
 
       {reviewItem ? (
         <div
-          className="rounded-xl border px-4 py-3 text-[14px]"
+          className="rounded-xl border px-4 py-3 text-[14px] leading-5"
           style={{
-            backgroundColor: "rgba(255, 209, 26, 0.10)",
-            borderColor: "rgba(255, 209, 26, 0.35)",
+            backgroundColor: "rgba(255, 209, 26, 0.20)",
+            borderColor: "rgba(255, 209, 26, 0.60)",
             color: "#4a3b1c",
           }}
         >
-          <p className="text-[12px] font-medium uppercase tracking-[0.5px]">
-            Sent to review
-          </p>
+          <p className="text-[14px] font-semibold leading-5">Sent to review</p>
           <p className="mt-1">{reviewItem.reason}</p>
         </div>
       ) : null}
-
-      <details className="overflow-hidden rounded-xl border" style={{ borderColor: "rgba(14, 15, 12, 0.12)" }}>
-        <summary
-          className="cursor-pointer px-4 py-3 text-[14px] font-medium"
-          style={{ color: "#0e0f0c" }}
-        >
-          Actions ({actions.length})
-        </summary>
-        <pre
-          className="overflow-x-auto border-t px-4 py-3 font-mono text-[12px] leading-relaxed"
-          style={{
-            backgroundColor: "#ffffff",
-            borderColor: "rgba(14, 15, 12, 0.08)",
-            color: "#0e0f0c",
-          }}
-        >
-          {JSON.stringify(actions, null, 2)}
-        </pre>
-      </details>
-
-      <details className="overflow-hidden rounded-xl border" style={{ borderColor: "rgba(14, 15, 12, 0.12)" }}>
-        <summary
-          className="cursor-pointer px-4 py-3 text-[14px] font-medium"
-          style={{ color: "#0e0f0c" }}
-        >
-          Audit log ({auditLogs.length})
-        </summary>
-        <ol
-          className="border-t px-4 py-3 text-[13px]"
-          style={{ borderColor: "rgba(14, 15, 12, 0.08)" }}
-        >
-          {auditLogs.map((log) => (
-            <li
-              key={log.id}
-              className="py-1.5"
-              style={{ color: "rgba(14, 15, 12, 0.85)" }}
-            >
-              {log.message}
-            </li>
-          ))}
-        </ol>
-      </details>
     </div>
   );
 }
