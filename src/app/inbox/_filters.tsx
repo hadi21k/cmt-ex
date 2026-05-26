@@ -5,10 +5,13 @@ import { useCallback } from "react";
 
 import type { EventSource, EventStatus } from "@/lib/workflow/types";
 
-// Inbox filter chips. Status (5) + Source (4) + review-only toggle.
-// State lives in the URL (?status=...&source=...&review=1) so filters
-// survive refresh + are shareable. Selecting a chip toggles it off when
-// already active.
+// Inbox filter chips per design.md §5 (Filter Chips). State lives in
+// the URL (?status=...&source=...) so filters survive refresh and are
+// shareable. Selecting a chip toggles it off when already active.
+// The rectangular ink-polarity treatment is deliberately distinct from
+// the pill-shaped semantic-color status chip palette: filters control
+// listing, status chips communicate event state. Two affordances, two
+// visuals.
 
 const STATUSES: Array<{ value: EventStatus; label: string }> = [
   { value: "received", label: "Received" },
@@ -28,10 +31,9 @@ const SOURCES: Array<{ value: EventSource; label: string }> = [
 interface FiltersProps {
   status: EventStatus | null;
   source: EventSource | null;
-  reviewOnly: boolean;
 }
 
-export function InboxFilters({ status, source, reviewOnly }: FiltersProps) {
+export function InboxFilters({ status, source }: FiltersProps) {
   const router = useRouter();
   const pathname = usePathname();
   const searchParams = useSearchParams();
@@ -47,7 +49,7 @@ export function InboxFilters({ status, source, reviewOnly }: FiltersProps) {
     [pathname, router, searchParams],
   );
 
-  const anyActive = status || source || reviewOnly;
+  const anyActive = status || source;
 
   return (
     <section className="flex flex-col gap-3">
@@ -79,24 +81,16 @@ export function InboxFilters({ status, source, reviewOnly }: FiltersProps) {
         ))}
       </FilterGroup>
 
-      <FilterGroup label="Quick">
-        <Chip
-          active={reviewOnly}
-          onClick={() => setParam("review", reviewOnly ? null : "1")}
+      {anyActive ? (
+        <button
+          type="button"
+          onClick={() => router.push(pathname)}
+          className="self-start text-[14px] underline underline-offset-2"
+          style={{ color: "rgba(14, 15, 12, 0.7)" }}
         >
-          Review-required only
-        </Chip>
-        {anyActive ? (
-          <button
-            type="button"
-            onClick={() => router.push(pathname)}
-            className="text-[13px] underline underline-offset-2"
-            style={{ color: "rgba(14, 15, 12, 0.7)" }}
-          >
-            Clear all
-          </button>
-        ) : null}
-      </FilterGroup>
+          Clear all filters
+        </button>
+      ) : null}
     </section>
   );
 }
@@ -111,8 +105,8 @@ function FilterGroup({
   return (
     <div className="flex flex-wrap items-center gap-2">
       <span
-        className="text-[12px] uppercase tracking-[0.6px]"
-        style={{ color: "rgba(14, 15, 12, 0.55)" }}
+        className="text-[14px] font-semibold leading-5"
+        style={{ color: "rgba(14, 15, 12, 0.7)" }}
       >
         {label}
       </span>
@@ -135,17 +129,17 @@ function Chip({
       type="button"
       onClick={onClick}
       aria-pressed={active}
-      className="rounded-full border px-3 py-1 text-[13px] transition-colors hover:bg-[rgba(14,15,12,0.06)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#9fe870]/55 focus-visible:ring-offset-2 focus-visible:ring-offset-background"
+      className="rounded-md border px-3 py-1 text-[14px] transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#9fe870]/55 focus-visible:ring-offset-2 focus-visible:ring-offset-background"
       style={
         active
           ? {
-              backgroundColor: "rgba(14, 15, 12, 0.12)",
+              backgroundColor: "#0e0f0c",
               borderColor: "#0e0f0c",
-              color: "#0e0f0c",
+              color: "#ffffff",
             }
           : {
-              backgroundColor: "white",
-              borderColor: "rgba(14, 15, 12, 0.2)",
+              backgroundColor: "#ffffff",
+              borderColor: "rgba(14, 15, 12, 0.15)",
               color: "rgba(14, 15, 12, 0.8)",
             }
       }

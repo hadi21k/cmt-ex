@@ -15,15 +15,16 @@ import type { Event, EventSource, EventStatus } from "@/lib/workflow/types";
 import { InboxFilters } from "./_filters";
 
 // Inbox per spec §3. Lists events with source_event_id, stream, type,
-// status, created_at, review flag, plus filters on status / source /
-// review-required (decision #5 in workflows-and-pages clarifications).
+// status, created_at, plus filters on status / source. The
+// "review-required only" toggle is removed: Status:`Needs review` covers
+// it. Table collapsed to 3 columns (Event / Status / Created) so the
+// primary scan column carries the most information per row.
 // Next 16: searchParams is async.
 
 interface InboxPageProps {
   searchParams: Promise<{
     status?: string;
     source?: string;
-    review?: string;
   }>;
 }
 
@@ -57,7 +58,6 @@ export default async function InboxPage({ searchParams }: InboxPageProps) {
   const sourceFilter = ALL_SOURCES.includes(params.source as EventSource)
     ? (params.source as EventSource)
     : null;
-  const reviewOnly = params.review === "1";
 
   const supabase = await createClient();
   let query = supabase
@@ -68,7 +68,6 @@ export default async function InboxPage({ searchParams }: InboxPageProps) {
 
   if (statusFilter) query = query.eq("status", statusFilter);
   if (sourceFilter) query = query.eq("source", sourceFilter);
-  if (reviewOnly) query = query.eq("status", "review_required");
 
   const { data } = await query;
   const events = (data ?? []) as Event[];
@@ -76,23 +75,19 @@ export default async function InboxPage({ searchParams }: InboxPageProps) {
   return (
     <div className="flex flex-1 flex-col">
       <div className="flex flex-col gap-6 px-4 py-6 lg:px-6">
-        <header className="flex flex-col gap-1">
-          <h1 className="text-[32px] leading-tight tracking-tight text-foreground">
+        <header className="flex flex-col gap-2">
+          <h1 className="text-[40px] leading-[1.1] font-black tracking-tight text-foreground">
             Event Inbox
           </h1>
           <p
-            className="text-sm"
+            className="text-sm leading-5"
             style={{ color: "rgba(14, 15, 12, 0.7)" }}
           >
             {events.length} event{events.length === 1 ? "" : "s"}, newest first.
           </p>
         </header>
 
-        <InboxFilters
-          status={statusFilter}
-          source={sourceFilter}
-          reviewOnly={reviewOnly}
-        />
+        <InboxFilters status={statusFilter} source={sourceFilter} />
 
         {events.length === 0 ? (
           <EmptyState />
@@ -103,34 +98,22 @@ export default async function InboxPage({ searchParams }: InboxPageProps) {
           >
             <Table>
               <TableHeader>
-                <TableRow style={{ backgroundColor: "rgba(14, 15, 12, 0.03)" }}>
+                <TableRow style={{ backgroundColor: "#e8ebe6" }}>
                   <TableHead
-                    className="text-[13px] uppercase tracking-[0.5px]"
-                    style={{ color: "rgba(14, 15, 12, 0.7)" }}
+                    className="text-[14px] font-semibold"
+                    style={{ color: "#0e0f0c" }}
                   >
-                    Source event ID
+                    Event
                   </TableHead>
                   <TableHead
-                    className="text-[13px] uppercase tracking-[0.5px]"
-                    style={{ color: "rgba(14, 15, 12, 0.7)" }}
-                  >
-                    Stream
-                  </TableHead>
-                  <TableHead
-                    className="text-[13px] uppercase tracking-[0.5px]"
-                    style={{ color: "rgba(14, 15, 12, 0.7)" }}
-                  >
-                    Type
-                  </TableHead>
-                  <TableHead
-                    className="text-[13px] uppercase tracking-[0.5px]"
-                    style={{ color: "rgba(14, 15, 12, 0.7)" }}
+                    className="text-[14px] font-semibold"
+                    style={{ color: "#0e0f0c" }}
                   >
                     Status
                   </TableHead>
                   <TableHead
-                    className="text-right text-[13px] uppercase tracking-[0.5px]"
-                    style={{ color: "rgba(14, 15, 12, 0.7)" }}
+                    className="text-right text-[14px] font-semibold"
+                    style={{ color: "#0e0f0c" }}
                   >
                     Created
                   </TableHead>
@@ -140,33 +123,29 @@ export default async function InboxPage({ searchParams }: InboxPageProps) {
                 {events.map((event) => (
                   <TableRow
                     key={event.id}
-                    className="cursor-pointer transition-colors hover:bg-[rgba(0,0,0,0.02)]"
+                    className="cursor-pointer transition-colors hover:bg-secondary"
                   >
-                    <TableCell className="font-mono text-[13px]">
+                    <TableCell>
                       <Link
                         href={`/events/${event.id}`}
                         className="block"
                         style={{ color: "#0e0f0c" }}
                       >
-                        {event.source_event_id}
-                      </Link>
-                    </TableCell>
-                    <TableCell>
-                      <Link
-                        href={`/events/${event.id}`}
-                        className="block text-[15px]"
-                        style={{ color: "#0e0f0c" }}
-                      >
-                        {SOURCE_LABEL[event.source]}
-                      </Link>
-                    </TableCell>
-                    <TableCell>
-                      <Link
-                        href={`/events/${event.id}`}
-                        className="block font-mono text-[13px]"
-                        style={{ color: "rgba(14, 15, 12, 0.8)" }}
-                      >
-                        {event.event_type}
+                        <p className="text-[16px] font-semibold leading-6">
+                          {SOURCE_LABEL[event.source]}{" "}
+                          <span
+                            className="font-mono text-[14px] font-normal"
+                            style={{ color: "rgba(14, 15, 12, 0.8)" }}
+                          >
+                            · {event.event_type}
+                          </span>
+                        </p>
+                        <p
+                          className="font-mono text-[13px] leading-5"
+                          style={{ color: "rgba(14, 15, 12, 0.6)" }}
+                        >
+                          {event.source_event_id}
+                        </p>
                       </Link>
                     </TableCell>
                     <TableCell>
@@ -177,7 +156,7 @@ export default async function InboxPage({ searchParams }: InboxPageProps) {
                     <TableCell className="text-right">
                       <Link
                         href={`/events/${event.id}`}
-                        className="block text-[13px] tabular-nums"
+                        className="block text-[14px] tabular-nums"
                         style={{ color: "rgba(14, 15, 12, 0.6)" }}
                       >
                         {formatTime(event.created_at)}
