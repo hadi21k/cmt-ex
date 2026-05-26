@@ -2,17 +2,17 @@
 
 ## Source of truth
 
-The master spec for this project lives outside the repo, in the flow vault:
+The master spec for this project lives in the repo at:
 
-**`/home/ubuntu/Desktop/learning/workspace/flow/vault/projects/operations-command-center/requirements.md`**
+**`docs/project/requirements.md`**
 
 **Read it before writing any code.** It is a verbatim transcription of the candidate-facing PDF and the contract you are being evaluated against. Do not skip a requirement — the evaluator may test with additional payloads.
 
-Project metadata, goals, constraints, and open questions live in `../workspace/flow/vault/projects/operations-command-center/CONTEXT.md`. The active implement plan is at `../workspace/flow/vault/implement/workflows-and-pages.md` (foundation work was `../workspace/flow/vault/implement/archive/setup-and-scaffold.md`).
+Project metadata, goals, constraints, and open questions live in `docs/project/CONTEXT.md`. The build record lives in `docs/implement/`: `workflows-and-pages.md` (feature work) and `setup-and-scaffold.md` (foundation work).
 
-The product-level user stories — the six end-to-end use cases the system must serve, the operator's daily loop, and the code-mapping table — live at `../workspace/flow/vault/projects/operations-command-center/user-stories.md`. **Read this before writing any feature code.** It is the why behind every adapter, server action, and UI surface.
+The product-level user stories — the six end-to-end use cases the system must serve, the operator's daily loop, and the code-mapping table — live at `docs/project/user-stories.md`. **Read this before writing any feature code.** It is the why behind every adapter, server action, and UI surface.
 
-The design system for this dashboard (tokens, components, do's and don'ts, extracted from cmonkeytribe.com and retargeted for product register) lives at `../workspace/flow/vault/projects/operations-command-center/design.md`. Read it before building any UI.
+The design system for this dashboard (tokens, components, do's and don'ts, extracted from cmonkeytribe.com and retargeted for product register) lives at `docs/project/design.md`. Read it before building any UI.
 
 ## Quick reference (do not drift from spec)
 

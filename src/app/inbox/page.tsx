@@ -77,10 +77,7 @@ export default async function InboxPage({ searchParams }: InboxPageProps) {
     <div className="flex flex-1 flex-col">
       <div className="flex flex-col gap-6 px-4 py-6 lg:px-6">
         <header className="flex flex-col gap-1">
-          <h1
-            className="text-[28px] font-bold tracking-tight"
-            style={{ color: "#2E2A39" }}
-          >
+          <h1 className="text-[32px] leading-tight tracking-tight text-foreground">
             Event Inbox
           </h1>
           <p
@@ -101,7 +98,7 @@ export default async function InboxPage({ searchParams }: InboxPageProps) {
           <EmptyState />
         ) : (
           <div
-            className="rounded-xl border bg-white"
+            className="overflow-hidden rounded-xl border bg-white"
             style={{ borderColor: "rgba(46, 42, 57, 0.1)" }}
           >
             <Table>

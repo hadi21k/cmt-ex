@@ -95,12 +95,17 @@ export interface AuditLog {
  * Result of running the engine on a single incoming event. Returned by
  * `processEvent` (see `engine.ts`). The shape lets the simulator UI render
  * a result preview without re-querying the database.
+ *
+ * `existed: true` means the engine's idempotency short-circuit returned a
+ * prior result for an already-seen `source_event_id`. No new event row, no
+ * new actions, no service re-execution. Spec §4 step 7.
  */
 export interface ProcessResult {
   event: Event;
   actions: Action[];
   reviewItem: ReviewQueueItem | null;
   auditLogs: AuditLog[];
+  existed: boolean;
 }
 
 /** A pending action emitted by an adapter, before persistence + execution. */

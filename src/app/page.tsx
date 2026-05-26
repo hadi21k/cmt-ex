@@ -42,10 +42,7 @@ export default async function DashboardPage() {
       <div className="@container/main flex flex-1 flex-col gap-2">
         <div className="flex flex-col gap-4 py-4 md:gap-6 md:py-6">
           <header className="flex flex-col gap-1 px-4 lg:px-6">
-            <h1
-              className="text-[28px] font-bold tracking-tight"
-              style={{ color: "#2E2A39" }}
-            >
+            <h1 className="text-[32px] leading-tight tracking-tight text-foreground">
               Dashboard
             </h1>
             <p

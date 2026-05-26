@@ -216,12 +216,18 @@ async function editAction(
   actionId: string,
   payload: Record<string, unknown>,
 ): Promise<void> {
-  const { error } = await supabase
+  const { data, error } = await supabase
     .from("actions")
     .update({ payload })
     .eq("id", actionId)
-    .eq("event_id", review.event_id);
+    .eq("event_id", review.event_id)
+    .select("id");
   if (error) throw new Error(`editAction failed: ${error.message}`);
+  if (!data || data.length === 0) {
+    throw new Error(
+      `Action ${actionId} does not exist or does not belong to this review item.`,
+    );
+  }
   await audit(supabase, review.event_id, "Operator edited action payload", {
     action_id: actionId,
   });
@@ -234,6 +240,11 @@ async function addNotes(
 ): Promise<void> {
   const existing = review.resolution_notes ?? "";
   const combined = existing ? `${existing}\n${notes}` : notes;
+  if (combined.length > NOTES_MAX) {
+    throw new Error(
+      `Combined notes would exceed ${NOTES_MAX} characters (existing ${existing.length} + new ${notes.length}). Trim and retry.`,
+    );
+  }
   const { error } = await supabase
     .from("review_queue_items")
     .update({ resolution_notes: combined })

@@ -305,6 +305,7 @@ async function loadResult(
     actions: (actionsRes.data ?? []) as Action[],
     reviewItem: (reviewRes.data ?? null) as ReviewQueueItem | null,
     auditLogs: (auditRes.data ?? []) as AuditLog[],
+    existed: false,
   };
 }
 
@@ -319,7 +320,8 @@ async function loadResultBySourceId(
     .maybeSingle();
   if (error) throw new Error(`idempotency check failed: ${error.message}`);
   if (!data) return null;
-  return await loadResult(supabase, data.id);
+  const result = await loadResult(supabase, data.id);
+  return { ...result, existed: true };
 }
 
 function errorMessage(err: unknown): string {

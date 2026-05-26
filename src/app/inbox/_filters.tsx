@@ -134,7 +134,8 @@ function Chip({
     <button
       type="button"
       onClick={onClick}
-      className="rounded-full border px-3 py-1 text-[13px] transition-colors"
+      aria-pressed={active}
+      className="rounded-full border px-3 py-1 text-[13px] transition-colors hover:bg-[rgba(18,83,107,0.06)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#12536B]/55 focus-visible:ring-offset-2 focus-visible:ring-offset-background"
       style={
         active
           ? {
@@ -148,7 +149,6 @@ function Chip({
               color: "rgba(46, 42, 57, 0.8)",
             }
       }
-      aria-pressed={active}
     >
       {children}
     </button>

@@ -20,21 +20,21 @@ export function AuditTimeline({ logs }: AuditTimelineProps) {
   }
 
   return (
-    <ol className="relative pl-6">
+    <ol className="relative pl-7">
       <span
         aria-hidden
-        className="absolute top-1 bottom-1 left-[7px] w-px"
+        className="absolute top-2 bottom-2 left-[7.5px] w-px"
         style={{ backgroundColor: "#12536B" }}
       />
       {logs.map((log) => (
         <li key={log.id} className="relative pb-5 last:pb-0">
           <span
             aria-hidden
-            className="absolute top-1.5 left-[3px] block h-2 w-2 rounded-full border"
+            className="absolute top-[6px] left-[-24px] block h-2 w-2 rounded-full border"
             style={{ backgroundColor: "#FDFBF7", borderColor: "#12536B" }}
           />
           <time
-            className="block text-[13px]"
+            className="block text-[13px] tabular-nums"
             style={{ color: "rgba(46, 42, 57, 0.6)" }}
             dateTime={log.created_at}
           >

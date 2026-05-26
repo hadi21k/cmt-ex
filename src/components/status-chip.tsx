@@ -40,12 +40,14 @@ interface StatusChipProps {
 
 export function StatusChip({ status, label }: StatusChipProps) {
   const variant = VARIANTS[status];
+  const text = label ?? variant.label;
   return (
     <span
       className="inline-flex items-center rounded-full px-3 py-0.5 text-[13px] font-medium tracking-normal whitespace-nowrap"
       style={{ backgroundColor: variant.bg, color: variant.text }}
+      aria-label={`Status: ${text}`}
     >
-      {label ?? variant.label}
+      {text}
     </span>
   );
 }

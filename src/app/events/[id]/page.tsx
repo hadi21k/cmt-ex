@@ -100,10 +100,7 @@ export default async function EventDetailPage({
             Event
           </p>
           <div className="flex flex-wrap items-center gap-3">
-            <h1
-              className="text-[28px] font-bold tracking-tight"
-              style={{ color: "#2E2A39" }}
-            >
+            <h1 className="text-[32px] leading-tight tracking-tight text-foreground">
               <span className="font-mono">{event.source_event_id}</span>
             </h1>
             <StatusChip status={event.status} />

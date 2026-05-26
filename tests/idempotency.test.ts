@@ -31,6 +31,7 @@ describe("Idempotency (test 4: duplicate source_event_id)", () => {
     const first = await processEvent(event);
     expect(first.event.status).toBe("completed");
     expect(first.actions).toHaveLength(2);
+    expect(first.existed).toBe(false);
     expect(db.events).toHaveLength(1);
     expect(db.actions).toHaveLength(2);
 
@@ -38,6 +39,7 @@ describe("Idempotency (test 4: duplicate source_event_id)", () => {
 
     expect(second.event.id).toBe(first.event.id);
     expect(second.actions).toHaveLength(2);
+    expect(second.existed).toBe(true);
 
     expect(db.events).toHaveLength(1);
     expect(db.actions).toHaveLength(2);
