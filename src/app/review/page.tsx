@@ -52,7 +52,7 @@ export default async function ReviewPage() {
           </h1>
           <p
             className="text-sm"
-            style={{ color: "rgba(46, 42, 57, 0.7)" }}
+            style={{ color: "rgba(14, 15, 12, 0.7)" }}
           >
             {withContext.length} open item
             {withContext.length === 1 ? "" : "s"}.
@@ -74,12 +74,12 @@ function EmptyState() {
     <div
       className="rounded-2xl border px-6 py-12 text-center"
       style={{
-        backgroundColor: "#FDFBF7",
-        borderColor: "rgba(46, 42, 57, 0.12)",
-        color: "rgba(46, 42, 57, 0.65)",
+        backgroundColor: "#ffffff",
+        borderColor: "rgba(14, 15, 12, 0.12)",
+        color: "rgba(14, 15, 12, 0.65)",
       }}
     >
-      <p className="text-[18px] font-medium" style={{ color: "#2E2A39" }}>
+      <p className="text-[18px] font-medium" style={{ color: "#0e0f0c" }}>
         No open review items.
       </p>
       <p className="mt-2 text-sm">
@@ -87,7 +87,7 @@ function EmptyState() {
         <Link
           href="/simulator"
           className="underline underline-offset-2"
-          style={{ color: "#12536B" }}
+          style={{ color: "#0e0f0c" }}
         >
           unknown event or one with simulate_failure
         </Link>

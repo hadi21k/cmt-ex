@@ -68,12 +68,12 @@ function NoSelectionState() {
     <div
       className="rounded-2xl border px-6 py-12 text-center"
       style={{
-        backgroundColor: "#FDFBF7",
-        borderColor: "rgba(46, 42, 57, 0.12)",
-        color: "rgba(46, 42, 57, 0.65)",
+        backgroundColor: "#ffffff",
+        borderColor: "rgba(14, 15, 12, 0.12)",
+        color: "rgba(14, 15, 12, 0.65)",
       }}
     >
-      <p className="text-[18px] font-medium" style={{ color: "#2E2A39" }}>
+      <p className="text-[18px] font-medium" style={{ color: "#0e0f0c" }}>
         Pick a review item from the queue.
       </p>
     </div>

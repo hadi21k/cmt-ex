@@ -40,7 +40,7 @@ The complete candidate-facing brief is captured verbatim in [requirements.md](./
 
 - [requirements.md](./requirements.md) - verbatim transcription of the candidate-facing PDF; the master spec for everything in this project (sections 1-14 + Appendix A sample payloads + Appendix B submission checklist).
 - [user-stories.md](./user-stories.md) - the six end-to-end use cases (3 happy paths + missing-field + unknown + simulated-failure), the operator's daily loop, the four-pillar rubric breakdown, and the code-mapping table. Read this before any feature code.
-- [design.md](./design.md) - design system (tokens, components, do's and don'ts) extracted from cmonkeytribe.com and retargeted for the dashboard's product register. Read before building any UI.
+- [design.md](./design.md) - design system (tokens, components, do's and don'ts) for the operator console: lime-green primary CTA on sage canvas, near-black ink, 24 px pill geometry, heavy-display plus utility typography pair. Read before building any UI.
 
 ## Decision log
 

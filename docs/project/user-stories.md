@@ -201,7 +201,7 @@ These are spec'd or implied by spec §13 + §14, captured here so we don't drift
 - **Don't blindly automate ambiguous payloads.** UC5's payload could be guessed at — don't. Send it to review with a clear reason.
 - **Don't double-execute.** UC1 retried twice is still one reminder sent. Idempotency is non-negotiable.
 - **Don't silently swallow failures.** UC6 must be visible on the dashboard's Failed counter, on the inbox list, in the audit timeline, AND in the review queue.
-- **Don't add brand-orange to status chips.** Brand-orange is the single per-screen CTA (Submit on simulator, Approve on review). Failure is `failed` status red (design.md §5), not brand-orange.
+- **Don't add primary lime to status chips.** The primary lime CTA is the single per-screen action (Submit on simulator, Approve on review). Failure is `failed` status red (design.md §5), not lime.
 - **Don't add a classifier or any LLM.** Rule-based routing on `(source, event_type)` covers every spec example. Spec §13: "Complex AI features" is out of scope.
 - **Don't require auth.** Spec §13.
 

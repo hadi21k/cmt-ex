@@ -36,14 +36,14 @@ export function SectionCards({ counts }: { counts: DashboardCounts }) {
             </CardDescription>
             <CardTitle
               className="text-[40px] leading-none font-bold tabular-nums"
-              style={{ color: "#2E2A39" }}
+              style={{ color: "#0e0f0c" }}
             >
               {counts[key]}
             </CardTitle>
             {hint ? (
               <p
                 className="mt-2 text-[13px]"
-                style={{ color: "rgba(46, 42, 57, 0.6)" }}
+                style={{ color: "rgba(14, 15, 12, 0.6)" }}
               >
                 {hint}
               </p>

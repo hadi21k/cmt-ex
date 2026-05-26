@@ -10,7 +10,7 @@ export default function SimulatorPage() {
           </h1>
           <p
             className="text-sm"
-            style={{ color: "rgba(46, 42, 57, 0.7)" }}
+            style={{ color: "rgba(14, 15, 12, 0.7)" }}
           >
             Pick a sample, edit JSON, submit. The engine handles it the same
             way a real webhook payload would.

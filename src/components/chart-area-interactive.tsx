@@ -43,11 +43,11 @@ export function ChartAreaInteractive({ recent }: RecentActivityProps) {
           <div
             className="rounded-xl px-6 py-8 text-center text-sm"
             style={{
-              backgroundColor: "rgba(0, 0, 0, 0.02)",
-              color: "rgba(0, 0, 0, 0.6)",
+              backgroundColor: "rgba(14, 15, 12, 0.02)",
+              color: "rgba(14, 15, 12, 0.6)",
             }}
           >
-            <p className="font-medium" style={{ color: "#2E2A39" }}>
+            <p className="font-medium" style={{ color: "#0e0f0c" }}>
               No events yet.
             </p>
             <p className="mt-1">
@@ -55,7 +55,7 @@ export function ChartAreaInteractive({ recent }: RecentActivityProps) {
               <Link
                 href="/simulator"
                 className="underline underline-offset-2"
-                style={{ color: "#12536B" }}
+                style={{ color: "#0e0f0c" }}
               >
                 simulator
               </Link>{" "}
@@ -63,7 +63,7 @@ export function ChartAreaInteractive({ recent }: RecentActivityProps) {
             </p>
           </div>
         ) : (
-          <ul className="divide-y" style={{ borderColor: "#BFBFBF" }}>
+          <ul className="divide-y" style={{ borderColor: "rgba(14, 15, 12, 0.1)" }}>
             {recent.map((event) => (
               <li key={event.id}>
                 <Link
@@ -73,19 +73,19 @@ export function ChartAreaInteractive({ recent }: RecentActivityProps) {
                   <div className="min-w-0">
                     <p
                       className="truncate text-[15px] font-medium"
-                      style={{ color: "#2E2A39" }}
+                      style={{ color: "#0e0f0c" }}
                     >
                       {SOURCE_LABEL[event.source] ?? event.source}
                       <span
                         className="ml-2 font-mono text-[13px]"
-                        style={{ color: "rgba(46, 42, 57, 0.6)" }}
+                        style={{ color: "rgba(14, 15, 12, 0.6)" }}
                       >
                         {event.event_type}
                       </span>
                     </p>
                     <p
                       className="mt-0.5 truncate text-[13px]"
-                      style={{ color: "rgba(46, 42, 57, 0.6)" }}
+                      style={{ color: "rgba(14, 15, 12, 0.6)" }}
                     >
                       {event.source_event_id}
                     </p>
@@ -93,7 +93,7 @@ export function ChartAreaInteractive({ recent }: RecentActivityProps) {
                   <StatusChip status={event.status} />
                   <time
                     className="text-[13px] tabular-nums"
-                    style={{ color: "rgba(46, 42, 57, 0.6)" }}
+                    style={{ color: "rgba(14, 15, 12, 0.6)" }}
                     dateTime={event.created_at}
                   >
                     {formatRelative(event.created_at)}

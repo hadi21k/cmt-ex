@@ -163,7 +163,7 @@ export function Simulator() {
       <section className="flex flex-col gap-3">
         <h2
           className="text-[13px] uppercase tracking-[0.5px]"
-          style={{ color: "rgba(46, 42, 57, 0.55)" }}
+          style={{ color: "rgba(14, 15, 12, 0.55)" }}
         >
           Sample payloads
         </h2>
@@ -176,18 +176,18 @@ export function Simulator() {
                 type="button"
                 onClick={() => loadSample(sample)}
                 aria-pressed={active}
-                className="flex flex-col gap-1 rounded-xl border px-4 py-3 text-left transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#12536B]/55 focus-visible:ring-offset-2 focus-visible:ring-offset-background"
+                className="flex flex-col gap-1 rounded-xl border px-4 py-3 text-left transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#9fe870]/55 focus-visible:ring-offset-2 focus-visible:ring-offset-background"
                 style={
                   active
                     ? {
-                        backgroundColor: "rgba(18, 83, 107, 0.06)",
-                        borderColor: "#12536B",
-                        color: "#12536B",
+                        backgroundColor: "rgba(14, 15, 12, 0.06)",
+                        borderColor: "#0e0f0c",
+                        color: "#0e0f0c",
                       }
                     : {
                         backgroundColor: "white",
-                        borderColor: "rgba(46, 42, 57, 0.12)",
-                        color: "#2E2A39",
+                        borderColor: "rgba(14, 15, 12, 0.12)",
+                        color: "#0e0f0c",
                       }
                 }
               >
@@ -195,7 +195,7 @@ export function Simulator() {
                 <span
                   className="text-[13px]"
                   style={{
-                    color: active ? "#12536B" : "rgba(46, 42, 57, 0.65)",
+                    color: active ? "#0e0f0c" : "rgba(14, 15, 12, 0.65)",
                   }}
                 >
                   {sample.description}
@@ -211,13 +211,13 @@ export function Simulator() {
           <div className="flex items-center justify-between">
             <h2
               className="text-[13px] uppercase tracking-[0.5px]"
-              style={{ color: "rgba(46, 42, 57, 0.55)" }}
+              style={{ color: "rgba(14, 15, 12, 0.55)" }}
             >
               Payload
             </h2>
             <span
               className="text-[13px]"
-              style={{ color: "rgba(46, 42, 57, 0.6)" }}
+              style={{ color: "rgba(14, 15, 12, 0.6)" }}
             >
               Edit before submitting.
             </span>
@@ -232,13 +232,13 @@ export function Simulator() {
             spellCheck={false}
             className="min-h-[360px] resize-y rounded-xl border p-4 font-mono text-[13px] leading-relaxed focus:outline-none focus-visible:ring-2"
             style={{
-              backgroundColor: "#FDFBF7",
-              borderColor: parseError ? "#8B1F12" : "rgba(46, 42, 57, 0.18)",
-              color: "#2E2A39",
+              backgroundColor: "#ffffff",
+              borderColor: parseError ? "#a7000d" : "rgba(14, 15, 12, 0.18)",
+              color: "#0e0f0c",
             }}
           />
           {parseError ? (
-            <p className="text-[13px]" style={{ color: "#8B1F12" }}>
+            <p className="text-[13px]" style={{ color: "#a7000d" }}>
               {parseError}
             </p>
           ) : null}
@@ -261,7 +261,7 @@ export function Simulator() {
         <div className="flex flex-col gap-3">
           <h2
             className="text-[13px] uppercase tracking-[0.5px]"
-            style={{ color: "rgba(46, 42, 57, 0.55)" }}
+            style={{ color: "rgba(14, 15, 12, 0.55)" }}
           >
             Result
           </h2>
@@ -269,8 +269,8 @@ export function Simulator() {
             <div
               className="flex min-h-[360px] flex-col items-start justify-center gap-1 rounded-xl border border-dashed p-6 text-[14px]"
               style={{
-                borderColor: "rgba(46, 42, 57, 0.18)",
-                color: "rgba(46, 42, 57, 0.6)",
+                borderColor: "rgba(14, 15, 12, 0.18)",
+                color: "rgba(14, 15, 12, 0.6)",
               }}
             >
               <p>No submissions yet.</p>
@@ -285,9 +285,9 @@ export function Simulator() {
             <div
               className="rounded-xl border p-4 text-[14px]"
               style={{
-                backgroundColor: "rgba(180, 35, 24, 0.06)",
-                borderColor: "rgba(180, 35, 24, 0.35)",
-                color: "#8B1F12",
+                backgroundColor: "rgba(208, 50, 56, 0.06)",
+                borderColor: "rgba(208, 50, 56, 0.35)",
+                color: "#a7000d",
               }}
             >
               <p className="font-medium">Submission failed.</p>
@@ -312,9 +312,9 @@ function ResultPreview({
         <div
           className="rounded-xl border px-4 py-3 text-[14px]"
           style={{
-            backgroundColor: "rgba(18, 83, 107, 0.08)",
-            borderColor: "rgba(18, 83, 107, 0.35)",
-            color: "#12536B",
+            backgroundColor: "rgba(14, 15, 12, 0.08)",
+            borderColor: "rgba(14, 15, 12, 0.35)",
+            color: "#0e0f0c",
           }}
         >
           <p className="text-[12px] font-medium uppercase tracking-[0.5px]">
@@ -332,20 +332,20 @@ function ResultPreview({
         className="flex flex-wrap items-center justify-between gap-3 rounded-xl border p-4"
         style={{
           backgroundColor: "white",
-          borderColor: "rgba(46, 42, 57, 0.12)",
+          borderColor: "rgba(14, 15, 12, 0.12)",
         }}
       >
         <div className="flex flex-col gap-1">
           <span
             className="font-mono text-[13px]"
-            style={{ color: "rgba(46, 42, 57, 0.7)" }}
+            style={{ color: "rgba(14, 15, 12, 0.7)" }}
           >
             {event.source_event_id}
           </span>
           <Link
             href={`/events/${event.id}`}
             className="text-[15px] font-medium underline underline-offset-2"
-            style={{ color: "#12536B" }}
+            style={{ color: "#0e0f0c" }}
           >
             Open event detail →
           </Link>
@@ -357,9 +357,9 @@ function ResultPreview({
         <div
           className="rounded-xl border px-4 py-3 text-[14px]"
           style={{
-            backgroundColor: "rgba(202, 138, 4, 0.10)",
-            borderColor: "rgba(202, 138, 4, 0.35)",
-            color: "#854D0E",
+            backgroundColor: "rgba(255, 209, 26, 0.10)",
+            borderColor: "rgba(255, 209, 26, 0.35)",
+            color: "#4a3b1c",
           }}
         >
           <p className="text-[12px] font-medium uppercase tracking-[0.5px]">
@@ -369,41 +369,41 @@ function ResultPreview({
         </div>
       ) : null}
 
-      <details className="overflow-hidden rounded-xl border" style={{ borderColor: "rgba(46, 42, 57, 0.12)" }}>
+      <details className="overflow-hidden rounded-xl border" style={{ borderColor: "rgba(14, 15, 12, 0.12)" }}>
         <summary
           className="cursor-pointer px-4 py-3 text-[14px] font-medium"
-          style={{ color: "#2E2A39" }}
+          style={{ color: "#0e0f0c" }}
         >
           Actions ({actions.length})
         </summary>
         <pre
           className="overflow-x-auto border-t px-4 py-3 font-mono text-[12px] leading-relaxed"
           style={{
-            backgroundColor: "#FDFBF7",
-            borderColor: "rgba(46, 42, 57, 0.08)",
-            color: "#2E2A39",
+            backgroundColor: "#ffffff",
+            borderColor: "rgba(14, 15, 12, 0.08)",
+            color: "#0e0f0c",
           }}
         >
           {JSON.stringify(actions, null, 2)}
         </pre>
       </details>
 
-      <details className="overflow-hidden rounded-xl border" style={{ borderColor: "rgba(46, 42, 57, 0.12)" }}>
+      <details className="overflow-hidden rounded-xl border" style={{ borderColor: "rgba(14, 15, 12, 0.12)" }}>
         <summary
           className="cursor-pointer px-4 py-3 text-[14px] font-medium"
-          style={{ color: "#2E2A39" }}
+          style={{ color: "#0e0f0c" }}
         >
           Audit log ({auditLogs.length})
         </summary>
         <ol
           className="border-t px-4 py-3 text-[13px]"
-          style={{ borderColor: "rgba(46, 42, 57, 0.08)" }}
+          style={{ borderColor: "rgba(14, 15, 12, 0.08)" }}
         >
           {auditLogs.map((log) => (
             <li
               key={log.id}
               className="py-1.5"
-              style={{ color: "rgba(46, 42, 57, 0.85)" }}
+              style={{ color: "rgba(14, 15, 12, 0.85)" }}
             >
               {log.message}
             </li>

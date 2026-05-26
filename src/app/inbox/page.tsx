@@ -82,7 +82,7 @@ export default async function InboxPage({ searchParams }: InboxPageProps) {
           </h1>
           <p
             className="text-sm"
-            style={{ color: "rgba(46, 42, 57, 0.7)" }}
+            style={{ color: "rgba(14, 15, 12, 0.7)" }}
           >
             {events.length} event{events.length === 1 ? "" : "s"}, newest first.
           </p>
@@ -99,38 +99,38 @@ export default async function InboxPage({ searchParams }: InboxPageProps) {
         ) : (
           <div
             className="overflow-hidden rounded-xl border bg-white"
-            style={{ borderColor: "rgba(46, 42, 57, 0.1)" }}
+            style={{ borderColor: "rgba(14, 15, 12, 0.1)" }}
           >
             <Table>
               <TableHeader>
-                <TableRow style={{ backgroundColor: "rgba(0, 0, 0, 0.03)" }}>
+                <TableRow style={{ backgroundColor: "rgba(14, 15, 12, 0.03)" }}>
                   <TableHead
                     className="text-[13px] uppercase tracking-[0.5px]"
-                    style={{ color: "rgba(46, 42, 57, 0.7)" }}
+                    style={{ color: "rgba(14, 15, 12, 0.7)" }}
                   >
                     Source event ID
                   </TableHead>
                   <TableHead
                     className="text-[13px] uppercase tracking-[0.5px]"
-                    style={{ color: "rgba(46, 42, 57, 0.7)" }}
+                    style={{ color: "rgba(14, 15, 12, 0.7)" }}
                   >
                     Stream
                   </TableHead>
                   <TableHead
                     className="text-[13px] uppercase tracking-[0.5px]"
-                    style={{ color: "rgba(46, 42, 57, 0.7)" }}
+                    style={{ color: "rgba(14, 15, 12, 0.7)" }}
                   >
                     Type
                   </TableHead>
                   <TableHead
                     className="text-[13px] uppercase tracking-[0.5px]"
-                    style={{ color: "rgba(46, 42, 57, 0.7)" }}
+                    style={{ color: "rgba(14, 15, 12, 0.7)" }}
                   >
                     Status
                   </TableHead>
                   <TableHead
                     className="text-right text-[13px] uppercase tracking-[0.5px]"
-                    style={{ color: "rgba(46, 42, 57, 0.7)" }}
+                    style={{ color: "rgba(14, 15, 12, 0.7)" }}
                   >
                     Created
                   </TableHead>
@@ -146,7 +146,7 @@ export default async function InboxPage({ searchParams }: InboxPageProps) {
                       <Link
                         href={`/events/${event.id}`}
                         className="block"
-                        style={{ color: "#2E2A39" }}
+                        style={{ color: "#0e0f0c" }}
                       >
                         {event.source_event_id}
                       </Link>
@@ -155,7 +155,7 @@ export default async function InboxPage({ searchParams }: InboxPageProps) {
                       <Link
                         href={`/events/${event.id}`}
                         className="block text-[15px]"
-                        style={{ color: "#2E2A39" }}
+                        style={{ color: "#0e0f0c" }}
                       >
                         {SOURCE_LABEL[event.source]}
                       </Link>
@@ -164,7 +164,7 @@ export default async function InboxPage({ searchParams }: InboxPageProps) {
                       <Link
                         href={`/events/${event.id}`}
                         className="block font-mono text-[13px]"
-                        style={{ color: "rgba(46, 42, 57, 0.8)" }}
+                        style={{ color: "rgba(14, 15, 12, 0.8)" }}
                       >
                         {event.event_type}
                       </Link>
@@ -178,7 +178,7 @@ export default async function InboxPage({ searchParams }: InboxPageProps) {
                       <Link
                         href={`/events/${event.id}`}
                         className="block text-[13px] tabular-nums"
-                        style={{ color: "rgba(46, 42, 57, 0.6)" }}
+                        style={{ color: "rgba(14, 15, 12, 0.6)" }}
                       >
                         {formatTime(event.created_at)}
                       </Link>
@@ -199,11 +199,11 @@ function EmptyState() {
     <div
       className="rounded-xl px-6 py-10 text-center"
       style={{
-        backgroundColor: "rgba(0, 0, 0, 0.02)",
-        color: "rgba(0, 0, 0, 0.6)",
+        backgroundColor: "rgba(14, 15, 12, 0.02)",
+        color: "rgba(14, 15, 12, 0.6)",
       }}
     >
-      <p className="text-base font-medium" style={{ color: "#2E2A39" }}>
+      <p className="text-base font-medium" style={{ color: "#0e0f0c" }}>
         No events match these filters.
       </p>
       <p className="mt-1 text-sm">

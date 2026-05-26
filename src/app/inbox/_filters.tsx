@@ -91,7 +91,7 @@ export function InboxFilters({ status, source, reviewOnly }: FiltersProps) {
             type="button"
             onClick={() => router.push(pathname)}
             className="text-[13px] underline underline-offset-2"
-            style={{ color: "rgba(46, 42, 57, 0.7)" }}
+            style={{ color: "rgba(14, 15, 12, 0.7)" }}
           >
             Clear all
           </button>
@@ -112,7 +112,7 @@ function FilterGroup({
     <div className="flex flex-wrap items-center gap-2">
       <span
         className="text-[12px] uppercase tracking-[0.6px]"
-        style={{ color: "rgba(46, 42, 57, 0.55)" }}
+        style={{ color: "rgba(14, 15, 12, 0.55)" }}
       >
         {label}
       </span>
@@ -135,18 +135,18 @@ function Chip({
       type="button"
       onClick={onClick}
       aria-pressed={active}
-      className="rounded-full border px-3 py-1 text-[13px] transition-colors hover:bg-[rgba(18,83,107,0.06)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#12536B]/55 focus-visible:ring-offset-2 focus-visible:ring-offset-background"
+      className="rounded-full border px-3 py-1 text-[13px] transition-colors hover:bg-[rgba(14,15,12,0.06)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#9fe870]/55 focus-visible:ring-offset-2 focus-visible:ring-offset-background"
       style={
         active
           ? {
-              backgroundColor: "rgba(18, 83, 107, 0.12)",
-              borderColor: "#12536B",
-              color: "#12536B",
+              backgroundColor: "rgba(14, 15, 12, 0.12)",
+              borderColor: "#0e0f0c",
+              color: "#0e0f0c",
             }
           : {
               backgroundColor: "white",
-              borderColor: "rgba(46, 42, 57, 0.2)",
-              color: "rgba(46, 42, 57, 0.8)",
+              borderColor: "rgba(14, 15, 12, 0.2)",
+              color: "rgba(14, 15, 12, 0.8)",
             }
       }
     >

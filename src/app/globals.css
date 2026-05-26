@@ -5,19 +5,20 @@
 @custom-variant dark (&:is(.dark *));
 
 /* Design tokens for the Operations Command Center.
- * Source: vault/projects/operations-command-center/design.md
- * (cmonkeytribe.com palette retargeted for a workflow-routing dashboard).
+ * Source: docs/project/design.md (mirrored to
+ * vault/projects/operations-command-center/design.md). Single-accent
+ * brand system: lime-green primary on sage canvas plus near-black ink.
  *
  * The shadcn variables below are the contract that components consume;
- * we override their values to map onto our two-color brand. The status
+ * we override their values to map onto our new tokens. The 5-status
  * chip palette (received / processing / completed / review_required /
- * failed) lives in design.md §5 and is applied per-component when the
- * actual pages are built — not as base tokens here. */
+ * failed) is implemented in src/components/status-chip.tsx using these
+ * tokens; status colors are NOT base tokens here. */
 
 @theme inline {
   --color-background: var(--background);
   --color-foreground: var(--foreground);
-  --font-sans: Helvetica, Arial, sans-serif;
+  --font-sans: "Inter", system-ui, -apple-system, sans-serif;
   --font-mono: ui-monospace, "Cascadia Code", "Source Code Pro", Menlo, Consolas, monospace;
   --font-heading: var(--font-sans);
   --color-sidebar-ring: var(--sidebar-ring);
@@ -49,118 +50,112 @@
   --color-popover: var(--popover);
   --color-card-foreground: var(--card-foreground);
   --color-card: var(--card);
-  --radius-sm: 10px;
-  --radius-md: 11px;
-  --radius-lg: 12px;
-  --radius-xl: 22px;
-  --radius-2xl: calc(var(--radius) * 1.8);
-  --radius-3xl: calc(var(--radius) * 2.2);
-  --radius-4xl: calc(var(--radius) * 2.6);
+  --radius-sm: 8px;
+  --radius-md: 12px;
+  --radius-lg: 16px;
+  --radius-xl: 24px;
+  --radius-2xl: 32px;
+  --radius-3xl: 48px;
+  --radius-4xl: 48px;
 }
 
 :root {
   /* Surface */
-  --background: #fdfbf7; /* cream */
-  --foreground: #2e2a39; /* ink */
-  --card: #ffffff;
-  --card-foreground: #2e2a39;
+  --background: #e8ebe6; /* canvas-soft (sage) */
+  --foreground: #0e0f0c; /* ink */
+  --card: #ffffff; /* canvas */
+  --card-foreground: #0e0f0c;
   --popover: #ffffff;
-  --popover-foreground: #2e2a39;
+  --popover-foreground: #0e0f0c;
 
-  /* Brand pair: teal = identity, orange = the single per-screen CTA */
-  --primary: #12536b; /* brand-teal */
-  --primary-foreground: #fdfbf7; /* cream on teal */
-  --accent: #ed5338; /* brand-orange (one per screen, action only) */
-  --accent-foreground: #fdfbf7; /* cream on orange */
+  /* Brand: lime-green = the single per-screen primary CTA */
+  --primary: #9fe870; /* primary lime */
+  --primary-foreground: #0e0f0c; /* ink on lime */
+  --accent: #9fe870; /* shadcn accent = same lime (single-accent brand) */
+  --accent-foreground: #0e0f0c;
 
-  /* Neutral fields */
-  --secondary: rgba(0, 0, 0, 0.03); /* surface-mute */
-  --secondary-foreground: #2e2a39;
-  --muted: rgba(0, 0, 0, 0.03);
-  --muted-foreground: rgba(46, 42, 57, 0.85); /* ink-soft */
+  /* Secondary fields */
+  --secondary: #e8ebe6; /* sage */
+  --secondary-foreground: #0e0f0c;
+  --muted: #e8ebe6; /* sage */
+  --muted-foreground: #454745; /* body */
 
   /* Status / system */
-  --destructive: #8b1f12; /* matches design.md status-failed text color */
-  --border: #bfbfbf; /* border-contrast */
-  --input: #bfbfbf;
-  --ring: #12536b; /* teal focus ring */
+  --destructive: #d03238; /* negative */
+  --border: rgba(14, 15, 12, 0.10); /* ink at 10% alpha hairline */
+  --input: rgba(14, 15, 12, 0.55); /* ink at 55% alpha input border */
+  --ring: #9fe870; /* lime focus ring */
 
-  /* Charts (placeholders; design.md says no decorative palette — adjust
-   * per chart when actually wired) */
-  --chart-1: #12536b;
-  --chart-2: rgba(18, 83, 107, 0.7);
-  --chart-3: rgba(18, 83, 107, 0.45);
-  --chart-4: rgba(46, 42, 57, 0.45);
-  --chart-5: rgba(46, 42, 57, 0.2);
+  /* Charts (neutral ladder; no decorative palette per design.md) */
+  --chart-1: #0e0f0c;
+  --chart-2: rgba(14, 15, 12, 0.7);
+  --chart-3: rgba(14, 15, 12, 0.45);
+  --chart-4: #868685; /* mute */
+  --chart-5: rgba(14, 15, 12, 0.2);
 
   --radius: 12px;
 
   /* Sidebar */
   --sidebar: #ffffff;
-  --sidebar-foreground: #2e2a39;
-  --sidebar-primary: #12536b; /* active route */
-  --sidebar-primary-foreground: #fdfbf7;
-  --sidebar-accent: rgba(18, 83, 107, 0.08);
-  --sidebar-accent-foreground: #12536b;
-  --sidebar-border: #bfbfbf;
-  --sidebar-ring: #12536b;
+  --sidebar-foreground: #0e0f0c;
+  --sidebar-primary: #9fe870; /* active route lime */
+  --sidebar-primary-foreground: #0e0f0c;
+  --sidebar-accent: #e8ebe6; /* sage hover */
+  --sidebar-accent-foreground: #0e0f0c;
+  --sidebar-border: rgba(14, 15, 12, 0.10);
+  --sidebar-ring: #9fe870;
 }
 
 /* No dark theme for this exercise. The design system is built around a
- * cream-warm surface and pure-white cards; flipping to dark would require
- * a re-derived palette that isn't in design.md. If a dark variant is ever
- * needed, populate the .dark selector here. */
+ * sage canvas with white cards; flipping to dark would require a
+ * re-derived palette that isn't in design.md. */
 
 @layer base {
   * {
     @apply border-border outline-ring/50;
   }
   html {
-    font-family: Helvetica, Arial, sans-serif;
-    letter-spacing: 0.6px;
+    font-family: "Inter", system-ui, -apple-system, sans-serif;
+    font-feature-settings: "calt";
+    letter-spacing: 0;
   }
   body {
     @apply bg-background text-foreground;
   }
 }
 
-/* Custom CTA primitives. Defined here so the simulator + review queue
- * share one definition of "brand-orange button" and "teal-outline button"
- * per design.md §5. The hover/active/focus treatment matches the spec
- * verbatim: 1px lift on hover with an orange-tinted soft shadow, teal
- * background swap on active, focus-visible ring on keyboard nav only. */
+/* Button primitives per design.md §5. The class names are retained from
+ * the previous design for low-friction migration; visuals are updated
+ * to the new tokens (lime primary, ink-outlined secondary, transparent
+ * ghost). 24 px pill geometry per the Friendliness rule. */
 
 .cta-primary {
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  height: 44px;
-  padding-inline: 28px;
-  border-radius: 11px;
-  background-color: #ed5338;
-  color: #fdfbf7;
-  font-size: 15px;
-  font-weight: 500;
-  letter-spacing: 1px;
+  height: 48px;
+  padding-inline: 24px;
+  border-radius: 24px;
+  background-color: #9fe870; /* primary lime */
+  color: #0e0f0c; /* ink */
+  font-size: 16px;
+  font-weight: 600;
+  letter-spacing: 0;
   transition:
-    transform 180ms cubic-bezier(0.22, 1, 0.36, 1),
     background-color 180ms cubic-bezier(0.22, 1, 0.36, 1),
     box-shadow 180ms cubic-bezier(0.22, 1, 0.36, 1);
 }
 .cta-primary:hover:not(:disabled) {
-  transform: translateY(-1px);
-  box-shadow: 0 4px 12px rgba(237, 83, 56, 0.22);
+  background-color: #cdffad; /* primary-hover */
 }
 .cta-primary:active:not(:disabled) {
-  background-color: #12536b;
-  transform: translateY(0);
-  box-shadow: none;
+  background-color: #c5edab; /* primary-neutral */
 }
 .cta-primary:focus-visible {
   outline: none;
   box-shadow:
-    0 0 0 3px #fdfbf7,
-    0 0 0 5px rgba(18, 83, 107, 0.55);
+    0 0 0 3px #ffffff,
+    0 0 0 6px #9fe870;
 }
 .cta-primary:disabled {
   opacity: 0.55;
@@ -171,27 +166,27 @@
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  height: 44px;
-  padding-inline: 20px;
-  border-radius: 11px;
-  background-color: #ffffff;
-  color: #12536b;
-  border: 1px solid #12536b;
-  font-size: 15px;
-  font-weight: 500;
-  letter-spacing: 0.6px;
+  height: 48px;
+  padding-inline: 24px;
+  border-radius: 24px;
+  background-color: #ffffff; /* canvas */
+  color: #0e0f0c; /* ink */
+  border: 1px solid #0e0f0c; /* ink hairline */
+  font-size: 16px;
+  font-weight: 600;
+  letter-spacing: 0;
   transition:
     background-color 180ms cubic-bezier(0.22, 1, 0.36, 1),
     box-shadow 180ms cubic-bezier(0.22, 1, 0.36, 1);
 }
 .cta-secondary:hover:not(:disabled) {
-  background-color: rgba(18, 83, 107, 0.06);
+  background-color: #e8ebe6; /* canvas-soft */
 }
 .cta-secondary:focus-visible {
   outline: none;
   box-shadow:
-    0 0 0 3px #fdfbf7,
-    0 0 0 5px rgba(18, 83, 107, 0.55);
+    0 0 0 3px #ffffff,
+    0 0 0 6px #9fe870;
 }
 .cta-secondary:disabled {
   opacity: 0.55;
@@ -203,23 +198,24 @@
   align-items: center;
   justify-content: center;
   height: 40px;
-  padding-inline: 12px;
-  border-radius: 10px;
+  padding-inline: 16px;
+  border-radius: 12px;
   background-color: transparent;
-  color: rgba(46, 42, 57, 0.75);
+  color: rgba(14, 15, 12, 0.7); /* ink at 70% alpha */
   font-size: 14px;
-  letter-spacing: 0.6px;
+  font-weight: 600;
+  letter-spacing: 0;
   transition: background-color 160ms cubic-bezier(0.22, 1, 0.36, 1);
 }
 .cta-ghost:hover:not(:disabled) {
-  background-color: rgba(0, 0, 0, 0.04);
-  color: #2e2a39;
+  background-color: rgba(14, 15, 12, 0.05);
+  color: #0e0f0c;
 }
 .cta-ghost:focus-visible {
   outline: none;
   box-shadow:
-    0 0 0 3px #fdfbf7,
-    0 0 0 5px rgba(18, 83, 107, 0.55);
+    0 0 0 3px #ffffff,
+    0 0 0 6px #9fe870;
 }
 .cta-ghost:disabled {
   opacity: 0.5;

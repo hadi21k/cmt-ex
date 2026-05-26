@@ -39,13 +39,13 @@ const ACTION_TONE: Record<
   ActionStatus,
   { backgroundColor: string; color: string }
 > = {
-  pending: { backgroundColor: "rgba(46, 42, 57, 0.08)", color: "#2E2A39" },
-  executing: { backgroundColor: "rgba(18, 83, 107, 0.12)", color: "#12536B" },
-  completed: { backgroundColor: "rgba(34, 134, 81, 0.12)", color: "#226051" },
-  failed: { backgroundColor: "rgba(180, 35, 24, 0.12)", color: "#8B1F12" },
+  pending: { backgroundColor: "rgba(14, 15, 12, 0.08)", color: "#0e0f0c" },
+  executing: { backgroundColor: "rgba(14, 15, 12, 0.12)", color: "#0e0f0c" },
+  completed: { backgroundColor: "rgba(46, 173, 75, 0.12)", color: "#054d28" },
+  failed: { backgroundColor: "rgba(208, 50, 56, 0.12)", color: "#a7000d" },
   cancelled: {
-    backgroundColor: "rgba(46, 42, 57, 0.06)",
-    color: "rgba(46, 42, 57, 0.6)",
+    backgroundColor: "rgba(14, 15, 12, 0.06)",
+    color: "rgba(14, 15, 12, 0.6)",
   },
 };
 
@@ -95,7 +95,7 @@ export default async function EventDetailPage({
         <header className="flex flex-col gap-3">
           <p
             className="text-[13px] tracking-[0.5px] uppercase"
-            style={{ color: "rgba(46, 42, 57, 0.6)" }}
+            style={{ color: "rgba(14, 15, 12, 0.6)" }}
           >
             Event
           </p>
@@ -105,8 +105,8 @@ export default async function EventDetailPage({
             </h1>
             <StatusChip status={event.status} />
           </div>
-          <p className="text-sm" style={{ color: "rgba(46, 42, 57, 0.7)" }}>
-            <span style={{ color: "#12536B" }}>
+          <p className="text-sm" style={{ color: "rgba(14, 15, 12, 0.7)" }}>
+            <span style={{ color: "#0e0f0c" }}>
               {SOURCE_LABEL[event.source]}
             </span>{" "}
             · <span className="font-mono">{event.event_type}</span> · received{" "}
@@ -120,9 +120,9 @@ export default async function EventDetailPage({
           <pre
             className="overflow-x-auto rounded-lg p-4 font-mono text-[13px] leading-relaxed"
             style={{
-              backgroundColor: "#FDFBF7",
-              color: "#2E2A39",
-              border: "1px solid rgba(46, 42, 57, 0.08)",
+              backgroundColor: "#ffffff",
+              color: "#0e0f0c",
+              border: "1px solid rgba(14, 15, 12, 0.08)",
             }}
           >
             {JSON.stringify(event.payload, null, 2)}
@@ -133,7 +133,7 @@ export default async function EventDetailPage({
           {actions.length === 0 ? (
             <p
               className="text-sm"
-              style={{ color: "rgba(46, 42, 57, 0.6)" }}
+              style={{ color: "rgba(14, 15, 12, 0.6)" }}
             >
               No actions generated. The event was routed without producing
               workflow output.
@@ -146,11 +146,11 @@ export default async function EventDetailPage({
                   className="rounded-lg border p-4"
                   style={{
                     backgroundColor: "white",
-                    borderColor: "rgba(46, 42, 57, 0.1)",
+                    borderColor: "rgba(14, 15, 12, 0.1)",
                   }}
                 >
                   <div className="flex flex-wrap items-center justify-between gap-2">
-                    <p className="font-mono text-[15px]" style={{ color: "#2E2A39" }}>
+                    <p className="font-mono text-[15px]" style={{ color: "#0e0f0c" }}>
                       {action.type}
                     </p>
                     <span
@@ -163,7 +163,7 @@ export default async function EventDetailPage({
                   {Object.keys(action.payload ?? {}).length > 0 ? (
                     <pre
                       className="mt-3 overflow-x-auto font-mono text-[12px] leading-relaxed"
-                      style={{ color: "rgba(46, 42, 57, 0.75)" }}
+                      style={{ color: "rgba(14, 15, 12, 0.75)" }}
                     >
                       {JSON.stringify(action.payload, null, 2)}
                     </pre>
@@ -184,14 +184,14 @@ export default async function EventDetailPage({
 
 function ReviewReason({ item }: { item: ReviewQueueItem }) {
   const colors = {
-    open: { bg: "rgba(202, 138, 4, 0.10)", text: "#854D0E", border: "rgba(202, 138, 4, 0.35)" },
-    approved: { bg: "rgba(34, 134, 81, 0.10)", text: "#226051", border: "rgba(34, 134, 81, 0.35)" },
-    rejected: { bg: "rgba(180, 35, 24, 0.10)", text: "#8B1F12", border: "rgba(180, 35, 24, 0.35)" },
-    resolved: { bg: "rgba(46, 42, 57, 0.06)", text: "rgba(46, 42, 57, 0.7)", border: "rgba(46, 42, 57, 0.2)" },
+    open: { bg: "rgba(255, 209, 26, 0.10)", text: "#4a3b1c", border: "rgba(255, 209, 26, 0.35)" },
+    approved: { bg: "rgba(46, 173, 75, 0.10)", text: "#054d28", border: "rgba(46, 173, 75, 0.35)" },
+    rejected: { bg: "rgba(208, 50, 56, 0.10)", text: "#a7000d", border: "rgba(208, 50, 56, 0.35)" },
+    resolved: { bg: "rgba(14, 15, 12, 0.06)", text: "rgba(14, 15, 12, 0.7)", border: "rgba(14, 15, 12, 0.2)" },
   }[item.status as "open" | "approved" | "rejected" | "resolved"] ?? {
-    bg: "rgba(46, 42, 57, 0.06)",
-    text: "#2E2A39",
-    border: "rgba(46, 42, 57, 0.2)",
+    bg: "rgba(14, 15, 12, 0.06)",
+    text: "#0e0f0c",
+    border: "rgba(14, 15, 12, 0.2)",
   };
 
   return (
@@ -230,7 +230,7 @@ function SectionPanel({
     <section className="flex flex-col gap-3">
       <h2
         className="text-[18px] font-medium"
-        style={{ color: emphasis ? "#12536B" : "#2E2A39" }}
+        style={{ color: emphasis ? "#0e0f0c" : "#0e0f0c" }}
       >
         {title}
       </h2>
