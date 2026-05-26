@@ -11,37 +11,42 @@ import { ReviewShell } from "./_review-shell";
 import type { ReviewListItem } from "./_review-list";
 
 // Review queue per spec §6. Server component fetches all open items
-// with their events + pending actions, then the client shell renders
-// the queue-and-detail split view.
+// with their events + pending/failed actions in one PostgREST query
+// (review_queue_items → events → actions, with the actions array
+// filtered to pending/failed inside the embed). Then the client shell
+// renders the queue-and-detail split view.
+
+interface ReviewRow extends ReviewQueueItem {
+  event: (Event & { action_list: Action[] | null }) | null;
+}
 
 export default async function ReviewPage() {
   const supabase = await createClient();
 
-  const itemsRes = await supabase
+  const { data } = await supabase
     .from("review_queue_items")
-    .select()
+    .select(`
+      *,
+      event:events!event_id(
+        *,
+        action_list:actions(*)
+      )
+    `)
     .eq("status", "open")
+    .in("event.action_list.status", ["pending", "failed"])
     .order("created_at", { ascending: false });
 
-  const items = (itemsRes.data ?? []) as ReviewQueueItem[];
-
-  const withContext: ReviewListItem[] = [];
-  for (const item of items) {
-    const [eventRes, actionsRes] = await Promise.all([
-      supabase.from("events").select().eq("id", item.event_id).maybeSingle(),
-      supabase
-        .from("actions")
-        .select()
-        .eq("event_id", item.event_id)
-        .in("status", ["pending", "failed"]),
-    ]);
-    if (!eventRes.data) continue;
-    withContext.push({
-      item,
-      event: eventRes.data as Event,
-      actions: (actionsRes.data ?? []) as Action[],
+  const withContext: ReviewListItem[] = ((data ?? []) as ReviewRow[])
+    .filter((row): row is ReviewRow & { event: NonNullable<ReviewRow["event"]> } => row.event !== null)
+    .map((row) => {
+      const { event, ...itemFields } = row;
+      const { action_list, ...eventFields } = event;
+      return {
+        item: itemFields as ReviewQueueItem,
+        event: eventFields as Event,
+        actions: (action_list ?? []) as Action[],
+      };
     });
-  }
 
   return (
     <div className="flex flex-1 flex-col">
