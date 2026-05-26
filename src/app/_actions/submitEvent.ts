@@ -40,6 +40,21 @@ export async function submitEvent(
 
   try {
     const result = await processEvent(parsed.data);
+
+    if (result.existed) {
+      // Operator-facing duplicate: surface as a validation error so the
+      // simulator UI shows the red "Submission failed" banner instead of
+      // pretending the submission succeeded. The engine's processEvent
+      // still returns existed=true (no new data written) so any future
+      // caller hitting it directly (e.g. a webhook handler retrying on a
+      // network blip) keeps the retry-safe idempotent semantics. Only the
+      // operator-facing entry point converts duplicate to error.
+      return {
+        ok: false,
+        error: `An event with source_event_id "${parsed.data.source_event_id}" already exists. Edit the id to create a new event.`,
+      };
+    }
+
     revalidateTag("events", "max");
     revalidateTag("review-queue", "max");
     revalidateTag("dashboard", "max");

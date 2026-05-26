@@ -77,7 +77,7 @@ const EDGE_CASES: Sample[] = [
   {
     id: "duplicate-finance",
     label: "FinanceOps · duplicate event",
-    description: "Same source_event_id as the overdue invoice. Submit after sample 1 to trigger idempotency (no new actions).",
+    description: "Same source_event_id as the overdue invoice. Submit after sample 1 to see the duplicate-id validation error.",
     payload: {
       source_event_id: "finance-001",
       source: "financeops",
@@ -371,26 +371,9 @@ function ResultPreview({
 }: {
   result: Extract<SubmitEventResult, { ok: true }>["result"];
 }) {
-  const { event, reviewItem, existed } = result;
+  const { event, reviewItem } = result;
   return (
     <div className="flex flex-col gap-4">
-      {existed ? (
-        <div
-          className="rounded-xl border px-4 py-3 text-[14px] leading-5"
-          style={{
-            backgroundColor: "#e8ebe6",
-            borderColor: "rgba(14, 15, 12, 0.20)",
-            color: "#0e0f0c",
-          }}
-        >
-          <p className="text-[14px] font-semibold leading-5">Duplicate event</p>
-          <p className="mt-1">
-            An event with this <span className="font-mono">source_event_id</span>{" "}
-            already exists. Returning the prior result without re-running. Edit the id to create a new event.
-          </p>
-        </div>
-      ) : null}
-
       <div
         className="flex flex-wrap items-center justify-between gap-3 rounded-xl border p-4"
         style={{
